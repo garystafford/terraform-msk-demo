@@ -8,7 +8,7 @@ Accessing an Amazon MSK cluster from EKS.
 2. Create VPC Peering relationship between MSK and EKS VPCs;
 3. Update routing tables for both VPCs and associated subnets to route traffic to CIDR range of opposite VPC;
 4. Update default VPC security groups to allow traffic;
-5. Update MSK security group to allow access to MSK ports (e.g., (2181, 2182, 9092, 9094, 9098) from EKS VPC CIDR range (e.g., 192.168.0.0/16);
+5. Update MSK security group to allow access to MSK ports (e.g., 2181, 2182, 9092, 9094, 9098) from EKS VPC CIDR range (e.g., 192.168.0.0/16);
 
 ## Create a 'Jump Box' EKS container
 
