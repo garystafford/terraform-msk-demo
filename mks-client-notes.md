@@ -29,7 +29,7 @@ aws kafka list-clusters | jq -r '.ClusterInfoList[].ClusterArn'
 aws kafka get-bootstrap-brokers \
     --cluster-arn $(aws kafka list-clusters | jq -r '.ClusterInfoList[0].ClusterArn')
 
-aws kafka list-clusters | jq -r '.ClusterInfoList[].ZookeeperConnectString'
+aws kafka list-clusters | jq -r '.ClusterInfoList[0].ZookeeperConnectString'
 ```
 
 ## Install Kafka
