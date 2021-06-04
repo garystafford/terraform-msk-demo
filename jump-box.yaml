@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jump-box
+  name: jump-box
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jump-box
+  template:
+    metadata:
+      labels:
+        app: jump-box
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+        - image: tomcat:jdk16-openjdk
+          name: jump-box
