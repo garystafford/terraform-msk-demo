@@ -1,10 +1,7 @@
-resource "aws_kms_key" "kms" {
-  description = "Amazon MSK Demo with IAM"
-}
-
-resource "aws_msk_configuration" "mks_config" {
+resource "aws_msk_configuration" "mks_config_iam" {
   kafka_versions = [
-    "2.8.0"]
+    "2.8.0"
+  ]
   name = "demo-mks-config-iam"
 
   server_properties = <<PROPERTIES
@@ -13,35 +10,35 @@ delete.topic.enable = true
 PROPERTIES
 }
 
-resource "aws_msk_cluster" "msk-cluster" {
-  cluster_name = var.cluster_name
+resource "aws_msk_cluster" "msk_cluster_iam" {
+  cluster_name = var.cluster_name_iam
   kafka_version = "2.8.0"
   number_of_broker_nodes = 2
   configuration_info {
-    arn = aws_msk_configuration.mks_config.arn
+    arn = aws_msk_configuration.mks_config_iam.arn
     revision = 1
   }
 
   broker_node_group_info {
     instance_type = "kafka.m5.large"
-    ebs_volume_size = 1000
+    ebs_volume_size = 120
     client_subnets = [
-      "subnet-0c923452cc7d0f173",
-      "subnet-026e1a252df965ce6"
+      aws_subnet.subnet_az1.id,
+      aws_subnet.subnet_az2.id
     ]
     security_groups = [
-      "sg-0de51e729ae9b28cf"
+      aws_security_group.sg.id
     ]
+  }
+
+  encryption_info {
+    encryption_at_rest_kms_key_arn = aws_kms_key.kms.arn
   }
 
   client_authentication {
     sasl {
       iam = true
     }
-  }
-
-  encryption_info {
-    encryption_at_rest_kms_key_arn = aws_kms_key.kms.arn
   }
 
   open_monitoring {
@@ -59,12 +56,12 @@ resource "aws_msk_cluster" "msk-cluster" {
     broker_logs {
       cloudwatch_logs {
         enabled = true
-        log_group = "msk_broker_logs"
+        log_group = aws_cloudwatch_log_group.test.name
       }
     }
   }
 
   tags = {
-    Name = "Amazon MSK Demo Cluster"
+    Name = "Amazon MSK Demo Cluster IAM"
   }
 }

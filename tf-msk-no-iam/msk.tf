@@ -102,7 +102,7 @@ delete.topic.enable = true
 PROPERTIES
 }
 
-resource "aws_msk_cluster" "msk-cluster" {
+resource "aws_msk_cluster" "msk_cluster" {
   cluster_name = var.cluster_name
   kafka_version = "2.8.0"
   number_of_broker_nodes = 3
