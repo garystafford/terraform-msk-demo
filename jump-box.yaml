@@ -2,20 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: jump-box
-  name: jump-box
+    app: kafka-client
+  name: kafka-client
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jump-box
+      app: kafka-client
   template:
     metadata:
       labels:
-        app: jump-box
+        app: kafka-client
       annotations:
         sidecar.istio.io/inject: "false"
     spec:
       containers:
         - image: tomcat:jdk16-openjdk
-          name: jump-box
+          name: kafka-client

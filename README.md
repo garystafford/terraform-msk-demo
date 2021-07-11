@@ -18,3 +18,13 @@ aws kafka describe-cluster --cluster-arn <YOUR_ARN_HERE>
 # assuming cluster 0 (first or single cluster)
 aws kafka describe-cluster --cluster-arn $(aws kafka list-clusters --query 'ClusterInfoList[0].ClusterArn' --output text)
 ```
+
+## Helm Chart
+
+```shell
+# perform dry run
+helm install kafka-client ./kafka-client --namespace kafka --debug --dry-run
+
+# apply chart resources
+helm install kafka-client ./kafka-client --namespace kafka --create-namespace
+```
