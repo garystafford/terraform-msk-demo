@@ -56,8 +56,8 @@ kubectl create namespace kafka
 eksctl create iamserviceaccount \
   --name msk-serviceaccount \
   --namespace kafka \
-  --region $AWS_REGION \
-  --cluster $CLUSTER_NAME}\
+  --region $EKS_REGION \
+  --cluster $CLUSTER_NAME \
   --attach-policy-arn arn:aws:iam::$AWS_ACCOUNT:policy/KafkaClientAuthorizationPolicy \
   --approve \
   --override-existing-serviceaccounts
