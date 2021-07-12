@@ -1,28 +1,6 @@
 # Amazon MSK Notes
 
-Accessing an Amazon MSK cluster from EKS.
-
-## Setup
-
-1. Deploy MSK cluster and EKS cluster;
-2. Create VPC Peering relationship between MSK and EKS VPCs;
-3. Update routing tables for both VPCs and associated subnets to route traffic to CIDR range of opposite VPC;
-4. Update default VPC security groups to allow traffic;
-5. Update MSK security group to allow access to MSK ports (e.g., 2181, 2182, 9092, 9094, 9098) from EKS VPC CIDR range (
-   e.g., 192.168.0.0/16);
-
-## Get Cluster Info
-
-```shell
-aws kafka list-clusters | jq -r '.ClusterInfoList[].ClusterArn'
-
-aws kafka get-bootstrap-brokers \
-    --cluster-arn $(aws kafka list-clusters | jq -r '.ClusterInfoList[0].ClusterArn')
-
-aws kafka list-clusters | jq -r '.ClusterInfoList[0].ZookeeperConnectString'
-```
-
-## Install Kafka
+## Install and Configure Kafka Client
 
 ```shell
 kubectl get pods -n kafka

@@ -8,6 +8,15 @@ _work in progress..._
 
 ![Graph](graphviz.png)
 
+## Setup
+
+1. Deploy MSK cluster and EKS cluster;
+2. Create VPC Peering relationship between MSK and EKS VPCs;
+3. Update routing tables for both VPCs and associated subnets to route traffic to CIDR range of opposite VPC;
+4. Update default VPC security groups to allow traffic;
+5. Update MSK security group to allow access to MSK ports (e.g., 2181, 2182, 9092, 9094, 9098) from EKS VPC CIDR range (
+   e.g., 192.168.0.0/16);
+
 ## Helpful AWS CLI Commands for Amazon MSK
 
 ```shell
@@ -24,17 +33,18 @@ aws kafka describe-cluster --cluster-arn \
 
 ## Terraform
 
-Deploy AWS resources.
+Deploy AWS MSK resources.
 
 ```shell
 cd ./tf-msk
+terraform validate
 terrafrom plan
 terraform apply
 ```
 
 ## Helm Chart
 
-Create a EKS-based Kafka client container.
+Create a EKS-based Kafka client container in an existing EKS cluster.
 
 ```shell
 export AWS_ACCOUNT=$(aws sts get-caller-identity --output text --query 'Account')
@@ -52,14 +62,10 @@ eksctl create iamserviceaccount \
   --approve \
   --override-existing-serviceaccounts
 
+eksctl get iamserviceaccount --cluster $CLUSTER_NAME --namespace kafka
 eksctl get iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace kafka
 
-eksctl delete iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace kafka
-eksctl get iamserviceaccount --cluster $CLUSTER_NAME --namespace kafka
-
-# kubectl get serviceaccount -n kafka
-# kubectl describe serviceaccount msk-serviceaccount -n kafka
-```
+# eksctl delete iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace kafka
 
 # perform dry run
 helm install kafka-client ./kafka-client --namespace kafka --debug --dry-run
