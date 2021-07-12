@@ -41,6 +41,8 @@ export AWS_ACCOUNT=$(aws sts get-caller-identity --output text --query 'Account'
 export EKS_REGION="us-east-1"
 export CLUSTER_NAME="istio-observe-demo"
 
+kubectl create namespace kafka
+
 eksctl create iamserviceaccount \
   --name msk-serviceaccount \
   --namespace kafka \
@@ -50,8 +52,13 @@ eksctl create iamserviceaccount \
   --approve \
   --override-existing-serviceaccounts
 
-kubectl describe msk-serviceaccount -n kafka
-kubectl describe serviceaccount msk-serviceaccount -n kafka
+eksctl get iamserviceaccount msk-serviceaccount --cluster ${CLUSTER_NAME} --namespace kafka
+
+eksctl delete iamserviceaccount msk-serviceaccount --cluster ${CLUSTER_NAME} --namespace kafka
+eksctl get iamserviceaccount --cluster ${CLUSTER_NAME} --namespace kafka
+
+# kubectl get serviceaccount -n kafka
+# kubectl describe serviceaccount msk-serviceaccount -n kafka
 ```
 
 # perform dry run
