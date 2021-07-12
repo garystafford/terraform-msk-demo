@@ -41,9 +41,3 @@ spec:
           ports:
             - containerPort: 8080
           imagePullPolicy: IfNotPresent
-{{/*          livenessProbe:*/}}
-{{/*            httpGet:*/}}
-{{/*              path: /api/health*/}}
-{{/*              port: 8080*/}}
-{{/*            initialDelaySeconds: 3*/}}
-{{/*            periodSeconds: 3*/}}

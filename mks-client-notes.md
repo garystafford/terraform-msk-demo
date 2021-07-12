@@ -72,8 +72,8 @@ kubectl cp ./kafka-config/client-iam.properties \
 Working with a Non-IAM Cluster.
 
 ```shell
-export ZOOKPR="z-1.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:2181,z-3.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:2181"
-export BBROKERS="b-1.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094,b-2.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094,b-3.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094"
+export ZOOKPR="z-1.demo-msk-cluster.abcdef.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster.abcdef.c2.kafka.us-east-1.amazonaws.com:2181,z-3.demo-msk-cluster.abcdef.c2.kafka.us-east-1.amazonaws.com:2181"
+export BBROKERS="b-1.demo-msk-cluster.abcdef.c2.kafka.us-east-1.amazonaws.com:9094,b-2.demo-msk-cluster.abcdef.c2.kafka.us-east-1.amazonaws.com:9094,b-3.demo-msk-cluster.abcdef.c2.kafka.us-east-1.amazonaws.com:9094"
 
 bin/kafka-topics.sh --create --topic demo-events \
     --partitions 3 --replication-factor 3 --zookeeper $ZOOKPR
@@ -100,8 +100,8 @@ Working with an IAM Cluster.
 wget https://github.com/aws/aws-msk-iam-auth/releases/download/1.1.0/aws-msk-iam-auth-1.1.0-all.jar
 mv aws-msk-iam-auth-1.1.0-all.jar libs/
 
-export ZOOKPR="z-1.demo-msk-cluster-iam.99s971.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster-iam.99s971.c2.kafka.us-east-1.amazonaws.com:2181,z-3.demo-msk-cluster-iam.99s971.c2.kafka.us-east-1.amazonaws.com:2181"
-export BBROKERS="b-1.demo-msk-cluster-iam.99s971.c2.kafka.us-east-1.amazonaws.com:9098,b-2.demo-msk-cluster-iam.99s971.c2.kafka.us-east-1.amazonaws.com:9098"
+export ZOOKPR="z-1.demo-msk-cluster-iam.123fgh.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster-iam.123fgh.c2.kafka.us-east-1.amazonaws.com:2181,z-3.demo-msk-cluster-iam.123fgh.c2.kafka.us-east-1.amazonaws.com:2181"
+export BBROKERS="b-1.demo-msk-cluster-iam.123fgh.c2.kafka.us-east-1.amazonaws.com:9098,b-2.demo-msk-cluster-iam.123fgh.c2.kafka.us-east-1.amazonaws.com:9098"
 
 bin/kafka-topics.sh --create --topic demo-events \
     --partitions 2 --replication-factor 2 --zookeeper $ZOOKPR \
