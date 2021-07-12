@@ -34,12 +34,13 @@ spec:
       annotations:
         sidecar.istio.io/inject: "false"
     spec:
+      serviceAccountName: msk-serviceaccount
       containers:
         - image: tomcat:10.0.8-jdk16-openjdk
           name: kafka-client
           ports:
             - containerPort: 8080
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: IfNotPresent
 {{/*          livenessProbe:*/}}
 {{/*            httpGet:*/}}
 {{/*              path: /api/health*/}}
