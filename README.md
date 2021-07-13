@@ -50,22 +50,23 @@ terraform apply
 export AWS_ACCOUNT=$(aws sts get-caller-identity --output text --query 'Account')
 export EKS_REGION="us-east-1"
 export CLUSTER_NAME="istio-observe-demo"
+export NAMESPACE="kafka"
 
-kubectl create namespace kafka
+kubectl create namespace $NAMESPACE
 
 eksctl create iamserviceaccount \
   --name msk-serviceaccount \
-  --namespace kafka \
+  --namespace $NAMESPACE \
   --region $EKS_REGION \
   --cluster $CLUSTER_NAME \
   --attach-policy-arn arn:aws:iam::$AWS_ACCOUNT:policy/KafkaClientAuthorizationPolicy \
   --approve \
   --override-existing-serviceaccounts
 
-eksctl get iamserviceaccount --cluster $CLUSTER_NAME --namespace kafka
-eksctl get iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace kafka
+eksctl get iamserviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
+eksctl get iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 
-# eksctl delete iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace kafka
+# eksctl delete iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 ```
 
 ## Helm Chart
@@ -74,11 +75,11 @@ Create a EKS-based Kafka client container in an existing EKS cluster.
 
 ```shell
 # perform dry run
-helm install kafka-client ./kafka-client --namespace kafka --debug --dry-run
+helm install kafka-client ./kafka-client --namespace $NAMESPACE --debug --dry-run
 
 # apply chart resources
-helm install kafka-client ./kafka-client --namespace kafka --create-namespace
+helm install kafka-client ./kafka-client --namespace $NAMESPACE --create-namespace
 
 # optional: update
-helm upgrade kafka-client ./kafka-client --namespace kafka
+helm upgrade kafka-client ./kafka-client --namespace $NAMESPACE
 ```
