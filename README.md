@@ -16,7 +16,7 @@ this [Terraform MSK Example](https://registry.terraform.io/providers/hashicorp/a
 6. Update MSK security group to allow access to MSK ports (e.g., 2181, 2182, 9092, 9094, 9098) from EKS VPC CIDR range (
    e.g., 192.168.0.0/16);
 7. Create IAM Role for Service Accounts (IRSA) - allows access to MSK from EKS;
-8. Deploy Kafka client container using Helm
+8. Deploy Tomcat-based Kafka client container using Helm;
 9. Configure Kafka client container (see [Install-Kafka-Client.md](./Install-Kafka-Client.md));
 
 ## Helpful AWS CLI Commands for Amazon MSK
