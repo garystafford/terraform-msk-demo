@@ -4,20 +4,18 @@ Terraform project for Amazon Managed Streaming for Apache Kafka (Amazon MSK). Or
 this [Terraform MSK Example](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/msk_cluster#example-usage)
 .
 
-_work in progress..._
-
 ![Graph](graphviz.png)
 
 ## Setup
 
-1. EKS cluster;
+1. Deploy EKS cluster using eksctl;
 2. Deploy MSK cluster and associated resources using Terraform;
-2. Create VPC Peering relationship between MSK and EKS VPCs;
-3. Update routing tables for both VPCs and associated subnets to route traffic to CIDR range of opposite VPC;
-4. Update default VPC security groups to allow traffic;
-5. Update MSK security group to allow access to MSK ports (e.g., 2181, 2182, 9092, 9094, 9098) from EKS VPC CIDR range (
+3. Create VPC Peering relationship between MSK and EKS VPCs;
+4. Update routing tables for both VPCs and associated subnets to route traffic to CIDR range of opposite VPC;
+5. Update default VPC security groups to allow traffic;
+6. Update MSK security group to allow access to MSK ports (e.g., 2181, 2182, 9092, 9094, 9098) from EKS VPC CIDR range (
    e.g., 192.168.0.0/16);
-6. Deploy Kafka client container using Helm and configure;
+7. Deploy Kafka client container using Helm and configure (see [Install-Kafka-Client.md](./Install-Kafka-Client.md));
 
 ## Helpful AWS CLI Commands for Amazon MSK
 
