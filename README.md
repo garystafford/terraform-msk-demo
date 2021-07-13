@@ -35,7 +35,7 @@ aws kafka describe-cluster --cluster-arn \
 
 ## Terraform
 
-Deploy AWS MSK resources.
+Deploy AWS MSK resources. PLEASE NOTE - this code creates two MSK clusters - one with and one without IAM. You can choose to deploy both or remove Terraform code for either one to prevent its creation.
 
 ```shell
 cd ./tf-msk
