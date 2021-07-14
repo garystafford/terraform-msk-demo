@@ -4,7 +4,7 @@ Terraform project for Amazon Managed Streaming for Apache Kafka (Amazon MSK). Or
 this [Terraform MSK Example](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/msk_cluster#example-usage)
 .
 
-![Graph](graphviz.png)
+![Graph](pics/graphviz.png)
 
 ## Setup
 
@@ -45,6 +45,8 @@ terraform apply
 ```
 
 ## IAM Role for Service Account (IRSA)
+
+For using IAM and OIDC auth with EKS and MSK.
 
 ```shell
 export AWS_ACCOUNT=$(aws sts get-caller-identity --output text --query 'Account')
