@@ -141,7 +141,7 @@ echo "export PATH=/usr/local/bin:$PATH" >> ~/.bashrc
 echo "AWS_PAGER=" >> ~/.bashrc
 source ~/.bashrc
 apt update
-apt install less
+apt install less groff
 ```
 
 Optional: Check your Identity.

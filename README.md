@@ -1,4 +1,4 @@
-# Terraform / Amazon MSK
+# Terraform, Amazon MSK, Amazon EKS Demo
 
 Terraform project for using Amazon Managed Streaming for Apache Kafka (Amazon MSK) from Amazon Elastic Kubernetes Service (Amazon EKS).
 
@@ -51,4 +51,4 @@ terraform apply
 
 # Results
 
-![Consumer](./pics/oidc_consumer.png)
+![Consumer](./pics/kafka_client.png)
