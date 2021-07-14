@@ -42,6 +42,7 @@ eksctl create iamserviceaccount \
   --approve \
   --override-existing-serviceaccounts
 
+# confirm successful creation of accounts
 eksctl get iamserviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 eksctl get iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 kubectl get serviceaccount -n kafka

@@ -10,24 +10,6 @@ kubectl describe pod $KAFKA_CONTAINER -n kafka
 kubectl exec -it $KAFKA_CONTAINER -n kafka -- bash
 ```
 
-Optional: Install AWS CLI v2
-```shell
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-./aws/install
-echo "export PATH=/usr/local/bin:$PATH" >> ~/.bashrc
-echo "AWS_PAGER=" >> ~/.bashrc
-source ~/.bashrc
-apt update
-apt install less
-```
-
-Optional: Check your Identity
-
-```shell
-aws sts get-caller-identity
-```
-
 <https://kafka.apache.org/quickstart>
 
 ```shell
@@ -107,16 +89,16 @@ bin/kafka-console-consumer.sh --bootstrap-server $BBROKERS \
     --topic demo-events --from-beginning
 ```
 
-Working with an IAM Cluster.
+Working with an IAM Cluster (IAM or OIDC).
 
 ```shell
-# install latest aws-msk-iam-auth jar in kafka classpath
 KAFKA_PACKAGE=kafka_2.13-2.8.0
 PROPERTIES_FILE="bin/client-iam.properties"
 # PROPERTIES_FILE="bin/client-oidc.properties"
 
 cd $KAFKA_PACKAGE
 
+# install latest aws-msk-iam-auth jar in kafka classpath for IAM
 wget https://github.com/aws/aws-msk-iam-auth/releases/download/1.1.0/aws-msk-iam-auth-1.1.0-all.jar
 mv aws-msk-iam-auth-1.1.0-all.jar libs/
 
@@ -144,24 +126,28 @@ bin/kafka-console-consumer.sh --bootstrap-server $BBROKERS \
     --topic demo-events-iam --from-beginning
 ```
 
-Successful Output Example
-
-```text
-root@kafka-client-oidc-6b7b88cc94-82mbf:/usr/local/tomcat/kafka_2.13-2.8.0# bin/kafka-console-producer.sh --broker-list $BBROKERS \
->     --producer.config bin/client-iam.properties --topic demo-events-iam
->Test of OIDC
->^C
-
-root@kafka-client-oidc-6b7b88cc94-82mbf:/usr/local/tomcat/kafka_2.13-2.8.0# bin/kafka-console-consumer.sh --bootstrap-server $BBROKERS \
->     --consumer.config bin/client-iam.properties \
->     --topic demo-events-iam --from-beginning
-Test of OIDC
-^C
-Processed a total of 1 messages
-```
-Unused.
+Optional: Install AWS CLI v2.
 
 ```shell
-# bin/zookeeper-server-start.sh config/zookeeper.properties > /dev/null 2>&1 &
-# bin/kafka-server-start.sh config/server.properties > /dev/null 2>&1 & 
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+./aws/install
+echo "export PATH=/usr/local/bin:$PATH" >> ~/.bashrc
+echo "AWS_PAGER=" >> ~/.bashrc
+source ~/.bashrc
+apt update
+apt install less
+```
+
+Optional: Check your Identity.
+
+```shell
+aws sts get-caller-identity
+```
+
+Unused, to start Kafka locally vs. MSK.
+
+```shell
+bin/zookeeper-server-start.sh config/zookeeper.properties > /dev/null 2>&1 &
+bin/kafka-server-start.sh config/server.properties > /dev/null 2>&1 & 
 ```

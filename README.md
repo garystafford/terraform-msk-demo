@@ -8,16 +8,18 @@ this [Terraform MSK Example](https://registry.terraform.io/providers/hashicorp/a
 
 ## Setup
 
+Assumes that you have eksctl, Terraform, AWS CLI v2, and Helm 3 installed.
+
 1. Deploy EKS cluster using eksctl;
-2. Deploy MSK cluster and associated resources using Terraform;
+2. Deploy MSK cluster and associated resources using Terraform (see commands below);
 3. Create VPC Peering relationship between MSK and EKS VPCs;
 4. Update routing tables for both VPCs and associated subnets to route traffic to CIDR range of opposite VPC;
 5. Update default VPC security groups to allow traffic;
 6. Update MSK security group to allow access to MSK ports (e.g., 2181, 2182, 9092, 9094, 9098) from EKS VPC CIDR range (
    e.g., 192.168.0.0/16);
 7. Create IAM Role for Service Accounts (IRSA) - allows access to MSK from EKS;
-8. Deploy Tomcat-based Kafka client container using Helm;
-9. Configure Kafka client container (see [Install-Kafka-Client.md](./Install-Kafka-Client.md));
+8. Deploy Tomcat-based Kafka client container using Helm (see [Helm README](./kafka-client/README.md));
+9. Configure Kafka client container (see [Kafka Client Configuration Notes](./Install-Kafka-Client.md));
 
 ## Helpful AWS CLI Commands for Amazon MSK
 
@@ -39,63 +41,14 @@ Deploy AWS MSK resources. PLEASE NOTE - this code creates two MSK clusters - one
 
 ```shell
 cd ./tf-msk
+
 terraform validate
+
 terrafrom plan
+
 terraform apply
 ```
 
-## IAM Role for Service Account (IRSA)
+# Results
 
-For using IAM and OIDC auth with EKS and MSK.
-
-```shell
-export AWS_ACCOUNT=$(aws sts get-caller-identity --output text --query 'Account')
-export EKS_REGION="us-east-1"
-export CLUSTER_NAME="istio-observe-demo"
-export NAMESPACE="kafka"
-
-kubectl create namespace $NAMESPACE
-
-# iam
-eksctl create iamserviceaccount \
-  --name msk-serviceaccount \
-  --namespace $NAMESPACE \
-  --region $EKS_REGION \
-  --cluster $CLUSTER_NAME \
-  --attach-policy-arn arn:aws:iam::$AWS_ACCOUNT:policy/KafkaClientAuthorizationPolicy \
-  --approve \
-  --override-existing-serviceaccounts
-
-# oidc
-eksctl create iamserviceaccount \
-  --name msk-oidc-serviceaccount \
-  --namespace $NAMESPACE \
-  --region $EKS_REGION \
-  --cluster $CLUSTER_NAME \
-  --attach-role-arn "arn:aws:iam::${AWS_ACCOUNT}:role/EksKafkaOidcRole" \
-  --approve \
-  --override-existing-serviceaccounts
-
-eksctl get iamserviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
-eksctl get iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
-kubectl get serviceaccount -n kafka
-
-# eksctl delete iamserviceaccount msk-oidc-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
-```
-
-## Helm Chart
-
-Create a EKS-based Kafka client container in an existing EKS cluster.
-
-```shell
-# perform dry run
-helm install kafka-client ./kafka-client --namespace $NAMESPACE --debug --dry-run
-
-# apply chart resources
-helm install kafka-client ./kafka-client --namespace $NAMESPACE --create-namespace
-
-# optional: update
-helm upgrade kafka-client ./kafka-client --namespace $NAMESPACE
-
-kubectl get pods -n kafka
-```
+![Consumer](./pics/oidc_consumer.png)
