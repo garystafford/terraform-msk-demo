@@ -1,5 +1,10 @@
 # Amazon MSK Notes
 
+## References
+
+- <https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html>
+- <https://eksctl.io/usage/iamserviceaccounts/>
+
 ## Install and Configure Kafka Client
 
 ```shell
@@ -37,7 +42,7 @@ kubectl cp ${PROPERTIES_FILE} \
   $KAFKA_CONTAINER:/usr/local/tomcat/$KAFKA_PACKAGE/bin/ -n kafka
 ```
 
-Install client properties for IAM auth cluster security.
+Install client properties for IAM-based auth with IAM Policy for security.
 
 <https://aws.amazon.com/blogs/big-data/securing-apache-kafka-is-easy-and-familiar-with-iam-access-control-for-amazon-msk/>
 <https://docs.aws.amazon.com/msk/latest/developerguide/iam-access-control.html#create-iam-access-control-policies>
@@ -50,7 +55,7 @@ kubectl cp ${PROPERTIES_FILE} \
   $KAFKA_CONTAINER:/usr/local/tomcat/$KAFKA_PACKAGE/bin/ -n kafka
 ```
 
-Install client properties for OIDC auth cluster security.
+Install client properties for IAM-based auth with existing IAM Role for security.
 
 ```shell
 KAFKA_PACKAGE=kafka_2.13-2.8.0
@@ -89,12 +94,12 @@ bin/kafka-console-consumer.sh --bootstrap-server $BBROKERS \
     --topic demo-events --from-beginning
 ```
 
-Working with an IAM Cluster (IAM or OIDC).
+Working with an IAM Cluster (W/ or w/o existing IAM Role).
 
 ```shell
 KAFKA_PACKAGE=kafka_2.13-2.8.0
 PROPERTIES_FILE="bin/client-iam.properties"
-# PROPERTIES_FILE="bin/client-oidc.properties"
+# PROPERTIES_FILE="bin/client-oidc.properties" # existing IAM role
 
 cd $KAFKA_PACKAGE
 

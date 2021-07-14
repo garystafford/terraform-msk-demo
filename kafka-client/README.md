@@ -4,15 +4,15 @@ Deploys two `tomcat:10.0.8-jdk16-openjdk` containers, which are then configured 
 
 ## Container 1
 
-Intended to be configured for use with an IAM Policy for auth. Container 1 uses the `msk-serviceaccount` Service Account. See the `iam.tf` file for the IAM Policy, `KafkaClientAuthorizationPolicy`.
+Intended to be configured for use with an IAM Policy for auth with OIDC. Container 1 uses the `msk-serviceaccount` Service Account. See the `eks_msk_policy.tf` file for the IAM Policy, `KafkaClientAuthorizationPolicy`.
 
 ## Container 2
 
-Intended to be configured for use with OIDC for auth. Container 2 uses the `msk-oidc-serviceaccount` Service Account. See the `oidc.tf` file for the IAM Role, `EksKafkaOidcRole`, which is associated with the IAM Policy, `KafkaClientAuthorizationPolicy`.
+Intended to be configured for use with an existing IAM Role for auth with OIDC. Container 2 uses the `msk-oidc-serviceaccount` Service Account. See the `eks_msk_role.tf` file for the IAM Role, `EksKafkaOidcRole`, which is associated with the IAM Policy, `KafkaClientAuthorizationPolicy`.
 
 ## IAM Role for Service Account (IRSA)
 
-For using IAM and OIDC auth with EKS and MSK.
+For using IAM auth with EKS and MSK, with or without an existing role.
 
 ```shell
 export AWS_ACCOUNT=$(aws sts get-caller-identity --output text --query 'Account')
@@ -22,7 +22,7 @@ export NAMESPACE="kafka"
 
 kubectl create namespace $NAMESPACE
 
-# iam
+# iam policy associated with service account
 eksctl create iamserviceaccount \
   --name msk-serviceaccount \
   --namespace $NAMESPACE \
@@ -32,7 +32,7 @@ eksctl create iamserviceaccount \
   --approve \
   --override-existing-serviceaccounts
 
-# oidc
+# existing iam role associated with service account
 eksctl create iamserviceaccount \
   --name msk-oidc-serviceaccount \
   --namespace $NAMESPACE \
