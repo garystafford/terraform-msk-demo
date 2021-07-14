@@ -54,6 +54,7 @@ export NAMESPACE="kafka"
 
 kubectl create namespace $NAMESPACE
 
+# iam
 eksctl create iamserviceaccount \
   --name msk-serviceaccount \
   --namespace $NAMESPACE \
@@ -63,8 +64,19 @@ eksctl create iamserviceaccount \
   --approve \
   --override-existing-serviceaccounts
 
+# oidc
+eksctl create iamserviceaccount \
+  --name msk-oidc-serviceaccount \
+  --namespace $NAMESPACE \
+  --region $EKS_REGION \
+  --cluster $CLUSTER_NAME \
+  --attach-policy-arn arn:aws:iam::$AWS_ACCOUNT:policy/KafkaClientAuthorizationPolicy \
+  --approve \
+  --override-existing-serviceaccounts
+
 eksctl get iamserviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 eksctl get iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
+kubectl get serviceaccount -n kafka
 
 # eksctl delete iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 ```
@@ -82,4 +94,6 @@ helm install kafka-client ./kafka-client --namespace $NAMESPACE --create-namespa
 
 # optional: update
 helm upgrade kafka-client ./kafka-client --namespace $NAMESPACE
+
+kubectl get pods -n kafka
 ```
