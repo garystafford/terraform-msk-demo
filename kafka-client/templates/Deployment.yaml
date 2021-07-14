@@ -41,3 +41,47 @@ spec:
           ports:
             - containerPort: 8080
           imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-client-oidc
+  labels:
+    app: kafka-client-oidc
+    component: service
+spec:
+  ports:
+    - name: http
+      port: 8080
+  selector:
+    app: kafka-client-oidc
+    component: service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-client-oidc
+  labels:
+    app: kafka-client-oidc
+    component: service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-client-oidc
+      component: service
+  template:
+    metadata:
+      labels:
+        app: kafka-client-oidc
+        component: service
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: msk-oidc-serviceaccount
+      containers:
+        - image: tomcat:10.0.8-jdk16-openjdk
+          name: kafka-client-oidc
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: IfNotPresent
