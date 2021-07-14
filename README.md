@@ -17,7 +17,7 @@ Assumes that you have eksctl, Terraform, AWS CLI v2, and Helm 3 installed.
 5. Update default VPC security groups to allow traffic;
 6. Update MSK security group to allow access to MSK ports (e.g., 2181, 2182, 9092, 9094, 9098) from EKS VPC CIDR range (
    e.g., 192.168.0.0/16);
-7. Create IAM Role for Service Accounts (IRSA) - allows access to MSK from EKS;
+7. Create IAM Roles for Service Accounts (IRSA) - allows access to MSK from EKS (see [Helm README](./kafka-client/README.md));
 8. Deploy Tomcat-based Kafka client container using Helm (see [Helm README](./kafka-client/README.md));
 9. Configure Kafka client container (see [Kafka Client Configuration Notes](./Install-Kafka-Client.md));
 
