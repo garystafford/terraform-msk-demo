@@ -70,7 +70,7 @@ eksctl create iamserviceaccount \
   --namespace $NAMESPACE \
   --region $EKS_REGION \
   --cluster $CLUSTER_NAME \
-  --attach-policy-arn arn:aws:iam::$AWS_ACCOUNT:policy/KafkaClientAuthorizationPolicy \
+  --attach-role-arn "arn:aws:iam::${AWS_ACCOUNT}:role/EksKafkaOidcRole" \
   --approve \
   --override-existing-serviceaccounts
 
@@ -78,7 +78,7 @@ eksctl get iamserviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 eksctl get iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 kubectl get serviceaccount -n kafka
 
-# eksctl delete iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
+# eksctl delete iamserviceaccount msk-oidc-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 ```
 
 ## Helm Chart

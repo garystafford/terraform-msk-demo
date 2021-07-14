@@ -50,11 +50,12 @@ Install client properties for non-IAM cluster security.
 
 ```shell
 KAFKA_PACKAGE=kafka_2.13-2.8.0
-kubectl cp ./kafka-config/client.properties \
+PROPERTIES_FILE="./kafka-config/client.properties"
+kubectl cp ${PROPERTIES_FILE} \
   $KAFKA_CONTAINER:/usr/local/tomcat/$KAFKA_PACKAGE/bin/ -n kafka
 ```
 
-Install client properties for IAM cluster security.
+Install client properties for IAM auth cluster security.
 
 <https://aws.amazon.com/blogs/big-data/securing-apache-kafka-is-easy-and-familiar-with-iam-access-control-for-amazon-msk/>
 <https://docs.aws.amazon.com/msk/latest/developerguide/iam-access-control.html#create-iam-access-control-policies>
@@ -62,7 +63,18 @@ Install client properties for IAM cluster security.
 
 ```shell
 KAFKA_PACKAGE=kafka_2.13-2.8.0
-kubectl cp ./kafka-config/client-iam.properties \
+PROPERTIES_FILE="./kafka-config/client-iam.properties"
+kubectl cp ${PROPERTIES_FILE} \
+  $KAFKA_CONTAINER:/usr/local/tomcat/$KAFKA_PACKAGE/bin/ -n kafka
+```
+
+Install client properties for OIDC auth cluster security.
+
+```shell
+KAFKA_PACKAGE=kafka_2.13-2.8.0
+PROPERTIES_FILE="./kafka-config/client-oidc.properties"
+sed -i "" "s/AWS_ACCOUNT/${AWS_ACCOUNT}/g" ${PROPERTIES_FILE}
+kubectl cp ${PROPERTIES_FILE} \
   $KAFKA_CONTAINER:/usr/local/tomcat/$KAFKA_PACKAGE/bin/ -n kafka
 ```
 
@@ -123,7 +135,7 @@ bin/kafka-console-consumer.sh --bootstrap-server $BBROKERS \
     --consumer.config bin/client-iam.properties --topic demo-events-iam
 
 bin/kafka-console-consumer.sh --bootstrap-server $BBROKERS \
-    --consumer.config bin/client-iam.properties \
+    --consumer.config bin/client-oidc.properties \
     --topic demo-events-iam --from-beginning
 ```
 
