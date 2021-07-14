@@ -1,8 +1,6 @@
 # Terraform / Amazon MSK
 
-Terraform project for Amazon Managed Streaming for Apache Kafka (Amazon MSK). Original Terraform code based on
-this [Terraform MSK Example](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/msk_cluster#example-usage)
-.
+Terraform project for using Amazon Managed Streaming for Apache Kafka (Amazon MSK) from Amazon Elastic Kubernetes Service (Amazon EKS).
 
 ![Graph](pics/graphviz.png)
 
@@ -38,6 +36,8 @@ aws kafka describe-cluster --cluster-arn \
 ## Terraform
 
 Deploy AWS MSK resources. PLEASE NOTE - this code creates two MSK clusters - one with and one without IAM. You can choose to deploy both or remove Terraform code for either one to prevent its creation.
+
+Original Terraform reference code based on this [Terraform MSK Example](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/msk_cluster#example-usage).
 
 ```shell
 cd ./tf-msk
