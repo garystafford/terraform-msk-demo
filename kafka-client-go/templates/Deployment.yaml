@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-client-consumer
+  labels:
+    app: kafka-client-consumer
+    component: service
+spec:
+  ports:
+    - name: http
+      port: 8080
+  selector:
+    app: kafka-client-consumer
+    component: service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-client-consumer
+  labels:
+    app: kafka-client-consumer
+    component: service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-client-consumer
+      component: service
+  template:
+    metadata:
+      labels:
+        app: kafka-client-consumer
+        component: service
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: msk-oidc-serviceaccount
+      containers:
+        - image: golang:1.16.5
+          name: kafka-client-consumer
+          command: ["/bin/sh"]
+          args: ["-c", "tail -f /dev/null"]
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: IfNotPresent

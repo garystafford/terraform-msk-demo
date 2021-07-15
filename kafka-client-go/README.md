@@ -56,13 +56,14 @@ Create a EKS-based Kafka client container in an existing EKS cluster.
 
 ```shell
 # perform dry run
-helm install kafka-client ./kafka-client --namespace $NAMESPACE --debug --dry-run
+helm install kafka-client-go ./kafka-client-go --namespace $NAMESPACE --debug --dry-run
 
 # apply chart resources
-helm install kafka-client ./kafka-client --namespace $NAMESPACE --create-namespace
+helm install kafka-client-go ./kafka-client-go --namespace $NAMESPACE --create-namespace
 
 # optional: update
-helm upgrade kafka-client ./kafka-client --namespace $NAMESPACE
+helm upgrade kafka-client-go ./kafka-client-go --namespace $NAMESPACE
 
-kubectl get pods -n kafka -l app=kafka-client -w
+kubectl get pods -n kafka -l app=kafka-client-consumer -w
+kubectl describe pod -n kafka -l app=kafka-client-consumer
 ```

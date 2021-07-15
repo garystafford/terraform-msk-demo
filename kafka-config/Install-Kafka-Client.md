@@ -9,7 +9,9 @@
 
 ```shell
 kubectl get pods -n kafka
-KAFKA_CONTAINER=<your_pod>
+export KAFKA_CONTAINER=$(kubectl get pods -n kafka -l app=kafka-client | awk 'FNR == 2 {print $1}')
+# export KAFKA_CONTAINER=$(kubectl get pods -n kafka -l app=kafka-client-oidc | awk 'FNR == 2 {print $1}')
+
 kubectl describe pod $KAFKA_CONTAINER -n kafka
 
 kubectl exec -it $KAFKA_CONTAINER -n kafka -- bash
