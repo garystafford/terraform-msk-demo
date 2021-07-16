@@ -8,11 +8,11 @@ import (
 )
 
 var (
-	logLevel       = getEnv("LOG_LEVEL", "debug")
-	topic          = getEnv("TOPIC", "demo-events")
-	broker1Address = getEnv("BROKER1", "b-1.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094")
-	broker2Address = getEnv("BROKER2", "b-2.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094")
-	broker3Address = getEnv("BROKER3", "b-3.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094")
+	logLevel       = getEnv("LOG_LEVEL", "info")
+	topic          = getEnv("TOPIC", "foo-topic")
+	broker1Address = getEnv("BROKER1", "localhost:9094")
+	broker2Address = getEnv("BROKER2", "localhost:9095")
+	broker3Address = getEnv("BROKER3", "localhost:9096")
 	brokers        = []string{broker1Address, broker2Address, broker3Address}
 	log            = logrus.New()
 )
