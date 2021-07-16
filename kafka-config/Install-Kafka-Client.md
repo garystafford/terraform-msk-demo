@@ -11,6 +11,7 @@
 kubectl get pods -n kafka
 export KAFKA_CONTAINER=$(kubectl get pods -n kafka -l app=kafka-client | awk 'FNR == 2 {print $1}')
 # export KAFKA_CONTAINER=$(kubectl get pods -n kafka -l app=kafka-client-oidc | awk 'FNR == 2 {print $1}')
+echo $KAFKA_CONTAINER
 
 kubectl describe pod $KAFKA_CONTAINER -n kafka
 
@@ -21,8 +22,7 @@ kubectl exec -it $KAFKA_CONTAINER -n kafka -- bash
 
 ```shell
 KAFKA_PACKAGE=kafka_2.13-2.8.0
-wget https://downloads.apache.org/kafka/2.8.0/$KAFKA_PACKAGE.tgz
-tar -xzf $KAFKA_PACKAGE.tgz
+wget -qO- https://downloads.apache.org/kafka/2.8.0/$KAFKA_PACKAGE.tgz | tar -xzf -
 ```
 
 ## Set up encryption for MSK in the EKS Tomcat container client
@@ -72,7 +72,6 @@ Working with a Non-IAM Cluster.
 ```shell
 KAFKA_PACKAGE=kafka_2.13-2.8.0
 PROPERTIES_FILE="bin/client.properties"
-
 cd $KAFKA_PACKAGE
 
 export ZOOKPR="z-1.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:2181,z-3.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:2181"
@@ -102,7 +101,6 @@ Working with an IAM Cluster (W/ or w/o existing IAM Role).
 KAFKA_PACKAGE=kafka_2.13-2.8.0
 PROPERTIES_FILE="bin/client-iam.properties"
 # PROPERTIES_FILE="bin/client-oidc.properties" # existing IAM role
-
 cd $KAFKA_PACKAGE
 
 # install latest aws-msk-iam-auth jar in kafka classpath for IAM

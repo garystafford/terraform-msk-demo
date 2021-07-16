@@ -1,133 +1,121 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka-client-consumer
+  name: kafka-demo-service-a
   labels:
-    app: kafka-client-consumer
+    app: kafka-demo-service-a
     component: service
 spec:
   ports:
     - name: http
       port: 8080
   selector:
-    app: kafka-client-consumer
+    app: kafka-demo-service-a
     component: service
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka-client-consumer
+  name: kafka-demo-service-a
   labels:
-    app: kafka-client-consumer
+    app: kafka-demo-service-a
     component: service
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
-      app: kafka-client-consumer
+      app: kafka-demo-service-a
       component: service
   template:
     metadata:
       labels:
-        app: kafka-client-consumer
+        app: kafka-demo-service-a
         component: service
       annotations:
         sidecar.istio.io/inject: "false"
     spec:
-      serviceAccountName: msk-oidc-serviceaccount
+      serviceAccountName: {{ .Values.serviceAccountName }}
       containers:
-        - image: golang:1.16.5
-          name: kafka-client-consumer
-          command: [ "/bin/sh" ]
-          args: [ "-c", "tail -f /dev/null" ]
+        - image: garystafford/kafka-demo-service:1.0.0
+          name: kafka-demo-service-a
           ports:
-            - containerPort: 8080
-          imagePullPolicy: IfNotPresent
+            - containerPort: {{ .Values.image.ports.containerPort }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: LOG_LEVEL
+              value: "debug"
+            - name: TOPIC1
+              value: "foo-topic"
+            - name: TOPIC2
+              value: "bar-topic"
+            - name: GROUP
+              value: "consumer-group-A"
+            - name: BROKER1
+              value: {{ .Values.env.broker1 }}
+            - name: BROKER2
+              value: {{ .Values.env.broker2 }}
+            - name: BROKER3
+              value: {{ .Values.env.broker3 }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka-consumer-go
+  name: kafka-demo-service-b
   labels:
-    app: kafka-consumer-go
+    app: kafka-demo-service-b
     component: service
 spec:
   ports:
     - name: http
       port: 8080
   selector:
-    app: kafka-consumer-go
+    app: kafka-demo-service-b
     component: service
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka-consumer-go
+  name: kafka-demo-service-b
   labels:
-    app: kafka-consumer-go
+    app: kafka-demo-service-b
     component: service
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
-      app: kafka-consumer-go
+      app: kafka-demo-service-b
       component: service
   template:
     metadata:
       labels:
-        app: kafka-consumer-go
+        app: kafka-demo-service-b
         component: service
       annotations:
         sidecar.istio.io/inject: "false"
     spec:
-      serviceAccountName: msk-oidc-serviceaccount
+      serviceAccountName: {{ .Values.serviceAccountName }}
       containers:
-        - image: garystafford/kafka-consumer-go:1.0.0
-          name: kafka-consumer-go
+        - image: garystafford/kafka-demo-service:1.0.0
+          name: kafka-demo-service-b
           ports:
-            - containerPort: 8080
-          imagePullPolicy: IfNotPresent
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: kafka-producer-go
-  labels:
-    app: kafka-producer-go
-    component: service
-spec:
-  ports:
-    - name: http
-      port: 8080
-  selector:
-    app: kafka-producer-go
-    component: service
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: kafka-producer-go
-  labels:
-    app: kafka-producer-go
-    component: service
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: kafka-producer-go
-      component: service
-  template:
-    metadata:
-      labels:
-        app: kafka-producer-go
-        component: service
-      annotations:
-        sidecar.istio.io/inject: "false"
-    spec:
-      serviceAccountName: msk-oidc-serviceaccount
-      containers:
-        - image: garystafford/kafka-producer-go:1.0.2
-          name: kafka-producer-go
-          ports:
-            - containerPort: 8080
-          imagePullPolicy: IfNotPresent
+            - containerPort: {{ .Values.image.ports.containerPort }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: LOG_LEVEL
+              value: "debug"
+            - name: TOPIC1
+              value: "bar-topic"
+            - name: TOPIC2
+              value: "foo-topic"
+            - name: GROUP
+              value: "consumer-group-B"
+            - name: BROKER1
+              value: {{ .Values.env.broker1 }}
+            - name: BROKER2
+              value: {{ .Values.env.broker2 }}
+            - name: BROKER3
+              value: {{ .Values.env.broker3 }}

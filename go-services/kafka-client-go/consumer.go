@@ -19,7 +19,7 @@ func consume(ctx context.Context) {
 	// it from receiving duplicate messages
 	r := kafka.NewReader(kafka.ReaderConfig{
 		Brokers: brokers,
-		Topic:   topic,
+		Topic:   topic2,
 		GroupID: group,
 		Logger:  kafka.LoggerFunc(log.Debugf),
 		Dialer:  dialer,

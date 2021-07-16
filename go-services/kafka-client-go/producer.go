@@ -19,9 +19,9 @@ func produce(ctx context.Context) {
 	// initialize the writer with the broker addresses, and the topic
 	w := kafka.NewWriter(kafka.WriterConfig{
 		Brokers:  brokers,
-		Topic:    topic,
+		Topic:    topic1,
 		Balancer: &kafka.Hash{},
-		Logger:  kafka.LoggerFunc(log.Debugf),
+		Logger:   kafka.LoggerFunc(log.Debugf),
 		Dialer:   dialer,
 	})
 
@@ -35,16 +35,16 @@ func produce(ctx context.Context) {
 		err := w.WriteMessages(ctx, kafka.Message{
 			Key: []byte(strconv.Itoa(i)),
 			// create an arbitrary message payload for the value
-			Value: []byte("this is message" + strconv.Itoa(i)),
+			Value: []byte("this is message: " + strconv.Itoa(i)),
 		})
 		if err != nil {
 			panic("could not write message " + err.Error())
 		}
 
 		// log a confirmation once the message is written
-		fmt.Println("writes:", i)
+		fmt.Println("writes: ", i)
 		i++
 		// sleep for a second
-		time.Sleep(time.Second)
+		time.Sleep(60 * time.Second)
 	}
 }
