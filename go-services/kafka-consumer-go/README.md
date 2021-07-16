@@ -15,7 +15,7 @@ time docker build -t garystafford/kafka-consumer-go:1.0.0 . --no-cache
 docker push garystafford/kafka-consumer-go:1.0.0
 ```
 
-### Check Logs
+### Check Logs from Consumer
 
 ```shell
 export KAFKA_CONTAINER=$(kubectl get pods -n kafka -l app=kafka-consumer-go | awk 'FNR == 2 {print $1}')
