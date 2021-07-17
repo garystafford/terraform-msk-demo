@@ -15,7 +15,7 @@ func main() {
 
 	svc := secretsmanager.New(sess)
 	input := &secretsmanager.GetSecretValueInput{
-		SecretId:     aws.String("AmazonMSK_credentials"),
+		SecretId:     aws.String("MySecret"),
 		VersionStage: aws.String("AWSCURRENT"),
 	}
 
@@ -45,14 +45,12 @@ func main() {
 	}
 
 	fmt.Println(result)
-	fmt.Println(result.Name)
-	fmt.Println(result.ARN)
-	fmt.Println(result.CreatedDate)
+	fmt.Println(*result.Name)
+	fmt.Println(*result.ARN)
+	fmt.Println(*result.CreatedDate)
 	fmt.Println(result.SecretBinary)
-	fmt.Println(result.CreatedDate)
-	fmt.Println(result.VersionId)
+	fmt.Println(*result.CreatedDate)
+	fmt.Println(*result.VersionId)
 	fmt.Println(result.VersionStages)
-	fmt.Println(result.SecretString)
-	foo := result.SecretString
-	print(foo)
+	fmt.Println(*result.SecretString)
 }
