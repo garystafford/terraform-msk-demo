@@ -15,7 +15,7 @@ func produce(ctx context.Context) {
 		Topic:    topic1,
 		Balancer: &kafka.Hash{},
 		Logger:   kafka.LoggerFunc(log.Debugf),
-		Dialer:  saslScramDialer(),
+		Dialer:   saslScramDialer(),
 	})
 
 	// initialize a counter

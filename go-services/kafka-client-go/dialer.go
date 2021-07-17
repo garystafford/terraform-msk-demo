@@ -8,9 +8,9 @@ import (
 func plainDialer() *kafka.Dialer {
 	config := tlsConfig()
 	dialer := &kafka.Dialer{
-		Timeout:       10 * time.Second,
-		DualStack:     true,
-		TLS:           config,
+		Timeout:   10 * time.Second,
+		DualStack: true,
+		TLS:       config,
 	}
 
 	return dialer
