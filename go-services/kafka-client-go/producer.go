@@ -9,20 +9,13 @@ import (
 )
 
 func produce(ctx context.Context) {
-	config := tlsConfig()
-	dialer := &kafka.Dialer{
-		Timeout:   10 * time.Second,
-		DualStack: true,
-		TLS:       config,
-	}
-
 	// initialize the writer with the broker addresses, and the topic
 	w := kafka.NewWriter(kafka.WriterConfig{
 		Brokers:  brokers,
 		Topic:    topic1,
 		Balancer: &kafka.Hash{},
 		Logger:   kafka.LoggerFunc(log.Debugf),
-		Dialer:   dialer,
+		Dialer:  saslScramDialer(),
 	})
 
 	// initialize a counter

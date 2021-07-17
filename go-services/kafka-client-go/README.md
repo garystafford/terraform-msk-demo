@@ -7,6 +7,7 @@
 - <https://www.sohamkamani.com/golang/working-with-kafka/>
 - <https://github.com/sohamkamani/golang-kafka-example/>
 - <https://github.com/segmentio/kafka-go>
+- <https://docs.aws.amazon.com/msk/latest/developerguide/msk-password.html>
 
 ### Copy Go Files to Container
 
@@ -36,6 +37,9 @@ go run kafka-client
 ```shell
 time docker build -t garystafford/kafka-demo-service:1.0.0 . --no-cache
 docker push garystafford/kafka-demo-service:1.0.0
+
+time docker build -t garystafford/kafka-demo-service:1.0.0-scram . --no-cache
+docker push garystafford/kafka-demo-service:1.0.0-scram
 ```
 
 ### Check Logs from Consumer

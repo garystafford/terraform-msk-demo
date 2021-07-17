@@ -4,16 +4,12 @@ import (
 	"context"
 	"fmt"
 	"github.com/segmentio/kafka-go"
-	"time"
 )
 
 func consume(ctx context.Context) {
-	config := tlsConfig()
-	dialer := &kafka.Dialer{
-		Timeout:   10 * time.Second,
-		DualStack: true,
-		TLS:       config,
-	}
+	dialer := saslScramDialer()
+	//dialer := plainDialer()
+
 	// initialize a new reader with the brokers and topic
 	// the groupID identifies the consumer and prevents
 	// it from receiving duplicate messages

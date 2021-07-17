@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -15,7 +16,7 @@ func main() {
 
 	svc := secretsmanager.New(sess)
 	input := &secretsmanager.GetSecretValueInput{
-		SecretId:     aws.String("MySecret"),
+		SecretId:     aws.String("AmazonMSK_credentials"),
 		VersionStage: aws.String("AWSCURRENT"),
 	}
 
@@ -44,13 +45,33 @@ func main() {
 		return
 	}
 
-	fmt.Println(result)
-	fmt.Println(*result.Name)
-	fmt.Println(*result.ARN)
-	fmt.Println(*result.CreatedDate)
-	fmt.Println(result.SecretBinary)
-	fmt.Println(*result.CreatedDate)
-	fmt.Println(*result.VersionId)
-	fmt.Println(result.VersionStages)
+	//fmt.Println(result)
+	//fmt.Println(*result.Name)
+	//fmt.Println(*result.ARN)
+	//fmt.Println(*result.CreatedDate)
+	//fmt.Println(result.SecretBinary)
+	//fmt.Println(*result.CreatedDate)
+	//fmt.Println(*result.VersionId)
+	//fmt.Println(result.VersionStages)
 	fmt.Println(*result.SecretString)
+
+	//type credentials struct {
+	//	password string
+	//	username string
+	//}
+	//
+	//var kmsCredentials credentials
+	//if err := json.Unmarshal([]byte(*result.SecretString), &kmsCredentials); err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//fmt.Println(kmsCredentials)
+
+	kmsCredentials := map[string]string{}
+	if err := json.Unmarshal([]byte(*result.SecretString), &kmsCredentials); err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Println(kmsCredentials["username"])
+	fmt.Println(kmsCredentials["password"])
 }
