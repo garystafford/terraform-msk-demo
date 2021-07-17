@@ -6,7 +6,7 @@ resource "aws_msk_scram_secret_association" "msk_cluster_scram_assoc" {
 }
 
 resource "aws_secretsmanager_secret" "scram_auth_secret" {
-  name       = "AmazonMSK_example"
+  name       = "AmazonMSK_credentials"
   kms_key_id = aws_kms_key.scram_auth_key.key_id
 }
 
@@ -16,7 +16,7 @@ resource "aws_kms_key" "scram_auth_key" {
 
 resource "aws_secretsmanager_secret_version" "scram_auth_secret_version" {
   secret_id     = aws_secretsmanager_secret.scram_auth_secret.id
-  secret_string = jsonencode({ username = "tierlenticar", password = "RReNJ6Q6&*8n9q&x35Tjuk*9" })
+  secret_string = jsonencode({ username = "tierlenticar", password = "xx45VsQ75WqgVatykHUw8Xze" })
 }
 
 resource "aws_secretsmanager_secret_policy" "scram_auth_secret_policy" {
