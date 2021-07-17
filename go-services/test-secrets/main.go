@@ -16,7 +16,7 @@ func main() {
 
 	svc := secretsmanager.New(sess)
 	input := &secretsmanager.GetSecretValueInput{
-		SecretId:     aws.String("AmazonMSK_example"),
+		SecretId:     aws.String("AmazonMSK_credentials"),
 		VersionStage: aws.String("AWSCURRENT"),
 	}
 
