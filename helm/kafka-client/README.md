@@ -42,6 +42,16 @@ eksctl create iamserviceaccount \
   --approve \
   --override-existing-serviceaccounts
 
+# access secrets manager for sasl scram
+eksctl create iamserviceaccount \
+  --name msk-sasl-scram-serviceaccount \
+  --namespace $NAMESPACE \
+  --region $EKS_REGION \
+  --cluster $CLUSTER_NAME \
+  --attach-policy-arn "arn:aws:iam::${AWS_ACCOUNT}:policy/EksScramSecretManagerPolicy" \
+  --approve \
+  --override-existing-serviceaccounts
+
 # confirm successful creation of accounts
 eksctl get iamserviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 eksctl get iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE

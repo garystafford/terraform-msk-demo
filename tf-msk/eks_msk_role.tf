@@ -15,17 +15,17 @@ resource "aws_iam_role" "eks_kafka_oidc_role" {
             "${var.oidc_id}" : "system:serviceaccount:${var.eks_namespace}:msk-oidc-serviceaccount"
           }
         }
-    },
-    {
-      Effect: "Allow",
-      Principal: {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/EksKafkaOidcRole"
       },
-      Action: "sts:AssumeRole",
-      Condition: {}
-    }
-  ]
-})
+      {
+        Effect : "Allow",
+        Principal : {
+          "AWS" : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/EksKafkaOidcRole"
+        },
+        Action : "sts:AssumeRole",
+        Condition : {}
+      }
+    ]
+  })
 
   tags = {
     Name = "EKS Kafka OIDC Role"

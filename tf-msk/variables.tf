@@ -10,6 +10,10 @@ variable "cluster_name_iam" {
   default = "demo-msk-cluster-iam"
 }
 
+variable "cluster_name_scram" {
+  default = "demo-msk-cluster-scram"
+}
+
 variable "oidc_arn" {
   default = "arn:aws:iam::676164205626:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/F91B063F4B2E8BDFED054DD64DAB4368"
 }
