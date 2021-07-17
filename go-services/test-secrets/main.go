@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -46,4 +45,14 @@ func main() {
 	}
 
 	fmt.Println(result)
+	fmt.Println(result.Name)
+	fmt.Println(result.ARN)
+	fmt.Println(result.CreatedDate)
+	fmt.Println(result.SecretBinary)
+	fmt.Println(result.CreatedDate)
+	fmt.Println(result.VersionId)
+	fmt.Println(result.VersionStages)
+	fmt.Println(result.SecretString)
+	foo := result.SecretString
+	print(foo)
 }

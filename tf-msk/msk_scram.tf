@@ -28,9 +28,12 @@ resource "aws_secretsmanager_secret_policy" "scram_auth_secret_policy" {
         Sid : "AWSKafkaResourcePolicy",
         Effect : "Allow",
         Principal : {
-          "Service" : "kafka.amazonaws.com"
+          "Service" : [
+            "kafka.amazonaws.com",
+            "eks.amazonaws.com"
+          ]
         },
-        Action : "secretsmanager:getSecretValue",
+        Action : "secretsmanager:GetSecretValue",
         Resource : aws_secretsmanager_secret.scram_auth_secret.arn
     }]
   })
@@ -44,8 +47,13 @@ resource "aws_iam_policy" "eks_client_secretmanager_policy" {
     "Statement" : [
       {
         Effect : "Allow",
-        Action : "secretsmanager:getSecretValue",
+        Action : "secretsmanager:GetSecretValue",
         Resource : aws_secretsmanager_secret.scram_auth_secret.arn
+      },
+      {
+        Effect : "Allow",
+        Action : "kms:Decrypt",
+        Resource : aws_kms_key.scram_auth_key.arn
       }
     ]
   })
