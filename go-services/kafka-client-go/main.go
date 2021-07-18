@@ -41,6 +41,9 @@ func init() {
 }
 
 func main() {
+	// create a new context
+	ctx := context.Background()
+
 	log.Debugf("broker1Address: %s", brokers[0])
 
 	if broker2Address != "" {
@@ -53,8 +56,9 @@ func main() {
 		log.Debugf("broker3Address: %s", brokers[2])
 	}
 
-	// create a new context
-	ctx := context.Background()
+	createTopicAuto(topic1, ctx)
+	createTopicAuto(topic2, ctx)
+
 	// produce messages in a new go routine, since
 	// both the produce and consume functions are
 	// blocking

@@ -9,13 +9,16 @@ import (
 )
 
 func produce(ctx context.Context) {
+	dialer := saslScramDialer()
+	//dialer := plainDialer()
+
 	// initialize the writer with the broker addresses, and the topic
 	w := kafka.NewWriter(kafka.WriterConfig{
 		Brokers:  brokers,
 		Topic:    topic1,
 		Balancer: &kafka.Hash{},
 		Logger:   kafka.LoggerFunc(log.Debugf),
-		Dialer:   saslScramDialer(),
+		Dialer:   dialer,
 	})
 
 	// initialize a counter

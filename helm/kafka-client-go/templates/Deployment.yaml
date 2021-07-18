@@ -167,3 +167,47 @@ spec:
               value: {{ .Values.env.scram.broker2 }}
 {{/*            - name: BROKER3*/}}
 {{/*              value: {{ .Values.env.broker3 }}*/}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cmak
+  labels:
+    app: cmak
+spec:
+  ports:
+    - name: http
+      port: 9000
+  selector:
+    app: cmak
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cmak
+  labels:
+    app: cmak
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: cmak
+  template:
+    metadata:
+      labels:
+        app: cmak
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+        - name: cmak
+          image: hlebalbau/kafka-manager:3.0.0.5
+          ports:
+            - containerPort: 9000
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ZK_HOSTS
+              value: "z-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-3.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181"
