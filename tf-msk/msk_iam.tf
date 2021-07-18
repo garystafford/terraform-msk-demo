@@ -65,3 +65,15 @@ resource "aws_msk_cluster" "msk_cluster_iam" {
     Name = "Amazon MSK Demo Cluster IAM"
   }
 }
+
+resource "aws_ssm_parameter" "param_mks_iam_zoo" {
+  name  = "/msk/iam/zookeeper"
+  type  = "StringList"
+  value = aws_msk_cluster.msk_cluster_iam.zookeeper_connect_string
+}
+
+resource "aws_ssm_parameter" "param_mks_iam_brokers" {
+  name  = "/msk/iam/brokers"
+  type  = "StringList"
+  value = aws_msk_cluster.msk_cluster_iam.bootstrap_brokers_sasl_iam
+}

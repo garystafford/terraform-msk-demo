@@ -68,3 +68,15 @@ resource "aws_msk_cluster" "msk_cluster" {
     Name = "Amazon MSK Demo Cluster"
   }
 }
+
+resource "aws_ssm_parameter" "param_mks_access_none_zoo" {
+  name  = "/msk/access-none/zookeeper"
+  type  = "StringList"
+  value = aws_msk_cluster.msk_cluster.zookeeper_connect_string
+}
+
+resource "aws_ssm_parameter" "param_mks_access_none_brokers" {
+  name  = "/msk/access-none/brokers"
+  type  = "StringList"
+  value = aws_msk_cluster.msk_cluster.bootstrap_brokers_tls
+}

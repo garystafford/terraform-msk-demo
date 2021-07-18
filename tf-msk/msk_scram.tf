@@ -54,6 +54,11 @@ resource "aws_iam_policy" "eks_client_secretmanager_policy" {
         Effect : "Allow",
         Action : "kms:Decrypt",
         Resource : aws_kms_key.scram_auth_key.arn
+      },
+      {
+        Effect : "Allow",
+        Action : "ssm:GetParameters",
+        Resource : "arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/msk/scram/*"
       }
     ]
   })
@@ -125,4 +130,16 @@ resource "aws_msk_cluster" "msk_cluster_scram" {
   tags = {
     Name = "Amazon MSK Demo Cluster SASL/SCRAM"
   }
+}
+
+resource "aws_ssm_parameter" "param_mks_scram_zoo" {
+  name  = "/msk/scram/zookeeper"
+  type  = "StringList"
+  value = aws_msk_cluster.msk_cluster_scram.zookeeper_connect_string
+}
+
+resource "aws_ssm_parameter" "param_mks_scram_brokers" {
+  name  = "/msk/scram/brokers"
+  type  = "StringList"
+  value = aws_msk_cluster.msk_cluster_scram.bootstrap_brokers_sasl_scram
 }
