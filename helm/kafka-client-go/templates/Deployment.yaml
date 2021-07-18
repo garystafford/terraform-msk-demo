@@ -152,7 +152,7 @@ spec:
     spec:
       containers:
         - name: cmak
-          image: hlebalbau/kafka-manager:3.0.0.5
+          image: hlebalbau/kafka-manager:latest
           ports:
             - containerPort: 9000
           imagePullPolicy: IfNotPresent

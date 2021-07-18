@@ -1,3 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cmak
+  labels:
+    app: cmak
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: cmak
+  template:
+    metadata:
+      labels:
+        app: cmak
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+        - name: cmak
+          image: hlebalbau/kafka-manager:latest
+          ports:
+            - containerPort: 9000
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ZK_HOSTS
+              value: {{ .Values.env.scram.zookeeper }}
+---
 apiVersion: v1
 kind: Service
 metadata:

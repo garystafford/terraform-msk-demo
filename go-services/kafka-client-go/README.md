@@ -8,6 +8,7 @@
 - <https://github.com/sohamkamani/golang-kafka-example/>
 - <https://github.com/segmentio/kafka-go>
 - <https://docs.aws.amazon.com/msk/latest/developerguide/msk-password.html>
+- <https://github.com/eshepelyuk/cmak-operator>
 
 ### Copy Go Files to Container
 
