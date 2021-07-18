@@ -21,4 +21,5 @@ env:
   scram:
     broker1: b-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096
     broker2: b-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096
-    zookeeper: z-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-3.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181
+    zookeeper:
+      plaintext: z-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-3.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181

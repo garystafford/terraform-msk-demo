@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: ZK_HOSTS
-              value: {{ .Values.env.scram.zookeeper }}
+              value: {{ .Values.env.scram.zookeeper.plaintext }}
 ---
 apiVersion: v1
 kind: Service
