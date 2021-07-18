@@ -134,14 +134,14 @@ bin/kafka-console-consumer.sh --bootstrap-server $BBROKERS \
 Optional: Install AWS CLI v2.
 
 ```shell
+apt update
+yes | apt install wget unzip less groff
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 ./aws/install
 echo "export PATH=/usr/local/bin:$PATH" >> ~/.bashrc
 echo "AWS_PAGER=" >> ~/.bashrc
 source ~/.bashrc
-apt update
-apt install less groff
 ```
 
 Optional: Check your Identity.

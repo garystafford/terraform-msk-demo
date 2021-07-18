@@ -41,12 +41,16 @@ func init() {
 }
 
 func main() {
+	log.Debugf("broker1Address: %s", brokers[0])
+
 	if broker2Address != "" {
 		brokers = []string{broker1Address, broker2Address}
+		log.Debugf("broker2Address: %s", brokers[1])
 	}
 
 	if broker3Address != "" {
 		brokers = []string{broker1Address, broker2Address, broker3Address}
+		log.Debugf("broker3Address: %s", brokers[2])
 	}
 
 	// create a new context

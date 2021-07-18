@@ -5,14 +5,16 @@ serviceAccountName: msk-sasl-scram-serviceaccount
 
 image:
 #  image: garystafford/kafka-demo-service:1.0.0
-  image: garystafford/kafka-demo-service:1.0.0-scram
+  image: garystafford/kafka-demo-service:1.0.1-scram
   pullPolicy: IfNotPresent
   ports:
     containerPort: 8080
 
 env:
-#  broker1: b-1.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094
-#  broker2: b-2.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094
-#  broker3: b-3.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094
-  broker1: b-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096
-  broker2: b-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096
+  plain:
+    broker1: b-1.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094
+    broker2: b-2.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094
+    broker3: b-3.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094
+  scram:
+    broker1: b-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096
+    broker2: b-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096

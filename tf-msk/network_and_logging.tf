@@ -40,6 +40,72 @@ resource "aws_security_group" "sg" {
   vpc_id = aws_vpc.vpc.id
 }
 
+resource "aws_security_group_rule" "sg_kms_2181" {
+  type      = "ingress"
+  from_port = 2181
+  to_port   = 2181
+  protocol  = "tcp"
+  cidr_blocks = [
+    var.eks_vpc_cidr
+  ]
+  security_group_id = aws_security_group.sg.id
+}
+
+resource "aws_security_group_rule" "sg_kms_2182" {
+  type      = "ingress"
+  from_port = 2182
+  to_port   = 2182
+  protocol  = "tcp"
+  cidr_blocks = [
+    var.eks_vpc_cidr
+  ]
+  security_group_id = aws_security_group.sg.id
+}
+
+resource "aws_security_group_rule" "sg_kms_9092" {
+  type      = "ingress"
+  from_port = 9092
+  to_port   = 9092
+  protocol  = "tcp"
+  cidr_blocks = [
+    var.eks_vpc_cidr
+  ]
+  security_group_id = aws_security_group.sg.id
+}
+
+resource "aws_security_group_rule" "sg_kms_9094" {
+  type      = "ingress"
+  from_port = 9094
+  to_port   = 9094
+  protocol  = "tcp"
+  cidr_blocks = [
+    var.eks_vpc_cidr
+  ]
+  security_group_id = aws_security_group.sg.id
+}
+
+resource "aws_security_group_rule" "sg_kms_9096" {
+  type      = "ingress"
+  from_port = 9096
+  to_port   = 9096
+  protocol  = "tcp"
+  cidr_blocks = [
+    var.eks_vpc_cidr
+  ]
+  security_group_id = aws_security_group.sg.id
+}
+
+resource "aws_security_group_rule" "sg_kms_9098" {
+  type      = "ingress"
+  from_port = 9098
+  to_port   = 9098
+  protocol  = "tcp"
+  cidr_blocks = [
+    var.eks_vpc_cidr
+  ]
+  security_group_id = aws_security_group.sg.id
+}
+
 resource "aws_kms_key" "kms" {
   description = "Amazon MSK Demo"
 }
