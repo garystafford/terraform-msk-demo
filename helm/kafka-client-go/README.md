@@ -60,6 +60,15 @@ kubectl get serviceaccount -n kafka
 # eksctl delete iamserviceaccount msk-oidc-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 ```
 
+## Create Topics using Kafka Client
+
+```shell
+bin/kafka-topics.sh --create --topic ba-topic --partitions 2 --replication-factor 2 --zookeeper $ZOOKPR
+bin/kafka-topics.sh --create --topic ba-topic --partitions 2 --replication-factor 2 --zookeeper $ZOOKPR
+bin/kafka-topics.sh --list --zookeeper $ZOOKPR
+```
+
+
 ## Deploy Helm Chart
 
 Create a EKS-based Kafka client container in an existing EKS cluster.

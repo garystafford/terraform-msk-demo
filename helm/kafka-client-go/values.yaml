@@ -1,11 +1,11 @@
-replicaCount: 1
+replicaCount: 2
 
 #serviceAccountName: msk-oidc-serviceaccount
 serviceAccountName: msk-sasl-scram-serviceaccount
 
 image:
 #  image: garystafford/kafka-demo-service:1.0.0
-  image: garystafford/kafka-demo-service:1.0.8-scram
+  image: garystafford/kafka-demo-service:1.0.9-scram
   pullPolicy: IfNotPresent
   ports:
     containerPort: 8080
@@ -21,3 +21,4 @@ env:
   scram:
     broker1: b-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096
     broker2: b-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096
+    zookeeper: z-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-3.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181

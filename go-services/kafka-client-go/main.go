@@ -56,8 +56,8 @@ func main() {
 		log.Debugf("broker3Address: %s", brokers[2])
 	}
 
-	createTopicAuto(topic1)
-	createTopicAuto(topic2)
+	//createTopicAuto(topic1)
+	//createTopicAuto(topic2)
 
 	// produce messages in a new go routine, since
 	// both the produce and consume functions are

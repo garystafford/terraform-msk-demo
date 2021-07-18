@@ -1,24 +1,24 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka-client-consumer
+  name: kafka-client-tester
   labels:
-    app: kafka-client-consumer
+    app: kafka-client-tester
     component: service
 spec:
   ports:
     - name: http
       port: 8080
   selector:
-    app: kafka-client-consumer
+    app: kafka-client-tester
     component: service
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka-client-consumer
+  name: kafka-client-tester
   labels:
-    app: kafka-client-consumer
+    app: kafka-client-tester
     component: service
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -26,20 +26,20 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: kafka-client-consumer
+      app: kafka-client-tester
       component: service
   template:
     metadata:
       labels:
-        app: kafka-client-consumer
+        app: kafka-client-tester
         component: service
       annotations:
         sidecar.istio.io/inject: "false"
     spec:
-      serviceAccountName: msk-oidc-serviceaccount
+      serviceAccountName: {{ .Values.serviceAccountName }}
       containers:
         - image: golang:1.16.5
-          name: kafka-client-consumer
+          name: kafka-client-tester
           command: [ "/bin/sh" ]
           args: [ "-c", "tail -f /dev/null" ]
           ports:
