@@ -71,12 +71,13 @@ func createTopics(topic string, ctx context.Context) {
 	}
 }
 
-func createTopicAuto(topic string, ctx context.Context)  {
+func createTopicAuto(topic string)  {
+	ctx2 := context.Background()
 	partitions := 2
 	dialer := saslScramDialer()
 	//dialer := plainDialer()
 
-	conn, err := dialer.DialLeader(ctx, "tcp", broker1Address, topic, partitions)
+	conn, err := dialer.DialLeader(ctx2, "tcp", broker1Address, topic, partitions)
 
 	if err != nil {
 		panic(err.Error())
@@ -87,4 +88,19 @@ func createTopicAuto(topic string, ctx context.Context)  {
 			log.Error(err.Error())
 		}
 	}(conn)
+
+	partitionNames, err := conn.ReadPartitions()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	m := map[string]struct{}{}
+
+
+	for _, p := range partitionNames {
+		m[p.Topic] = struct{}{}
+	}
+	for k := range m {
+		log.Debugf(k)
+	}
 }

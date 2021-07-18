@@ -5,7 +5,7 @@ serviceAccountName: msk-sasl-scram-serviceaccount
 
 image:
 #  image: garystafford/kafka-demo-service:1.0.0
-  image: garystafford/kafka-demo-service:1.0.5-scram
+  image: garystafford/kafka-demo-service:1.0.8-scram
   pullPolicy: IfNotPresent
   ports:
     containerPort: 8080
