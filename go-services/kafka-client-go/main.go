@@ -2,22 +2,20 @@ package main
 
 import (
 	"context"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
 	lrf "github.com/banzaicloud/logrus-runtime-formatter"
 	"github.com/sirupsen/logrus"
 	"os"
 )
 
-// the topic and broker address are initialized as vars
 var (
-	logLevel       = getEnv("LOG_LEVEL", "info")
-	topic1         = getEnv("TOPIC1", "foo-topic")
-	topic2         = getEnv("TOPIC2", "bar-topic")
-	group          = getEnv("GROUP", "consumer-group-A")
-	broker1Address = getEnv("BROKER1", "localhost:9094")
-	broker2Address = getEnv("BROKER2", "")
-	broker3Address = getEnv("BROKER3", "")
-	brokers        = []string{broker1Address}
-	log            = logrus.New()
+	logLevel = getEnv("LOG_LEVEL", "info")
+	topic1   = getEnv("TOPIC1", "foo-topic")
+	topic2   = getEnv("TOPIC2", "bar-topic")
+	group    = getEnv("GROUP", "consumer-group-A")
+	brokers  []string
+	log      = logrus.New()
 )
 
 func getEnv(key, fallback string) string {
@@ -40,24 +38,22 @@ func init() {
 	log.Level = level
 }
 
+func createSession() *session.Session {
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String(region),
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return sess
+}
+
 func main() {
 	// create a new context
 	ctx := context.Background()
 
-	log.Debugf("broker1Address: %s", brokers[0])
-
-	if broker2Address != "" {
-		brokers = []string{broker1Address, broker2Address}
-		log.Debugf("broker2Address: %s", brokers[1])
-	}
-
-	if broker3Address != "" {
-		brokers = []string{broker1Address, broker2Address, broker3Address}
-		log.Debugf("broker3Address: %s", brokers[2])
-	}
-
-	//createTopicAuto(topic1)
-	//createTopicAuto(topic2)
+	brokers = getBrokers()
 
 	// produce messages in a new go routine, since
 	// both the produce and consume functions are

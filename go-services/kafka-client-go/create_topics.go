@@ -71,7 +71,7 @@ func createTopics(topic string, ctx context.Context) {
 	}
 }
 
-func createTopicAuto(topic string)  {
+func createTopicAuto(topic string) {
 	ctx2 := context.Background()
 	dialer := saslScramDialer()
 	//dialer := plainDialer()
@@ -94,7 +94,6 @@ func createTopicAuto(topic string)  {
 	}
 
 	m := map[string]struct{}{}
-
 
 	for _, p := range partitionNames {
 		m[p.Topic] = struct{}{}

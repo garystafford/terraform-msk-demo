@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/scram"
@@ -17,10 +16,13 @@ var (
 	versionStage = "AWSCURRENT"
 )
 
-func getCredentials() (string, string, error) {
-	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String(region),
-	})
+type credentials struct {
+	username string
+	password string
+}
+
+func getCredentials() credentials {
+	sess := createSession()
 	svc := secretsmanager.New(sess)
 	input := &secretsmanager.GetSecretValueInput{
 		SecretId:     aws.String(secretId),
@@ -53,19 +55,19 @@ func getCredentials() (string, string, error) {
 
 	kmsCredentials := map[string]string{}
 	if err := json.Unmarshal([]byte(*result.SecretString), &kmsCredentials); err != nil {
-		return "", "", err
+		log.Panic(err.Error())
 	}
 
-	return kmsCredentials["username"], kmsCredentials["password"], nil
+	return credentials{
+		username: kmsCredentials["username"],
+		password: kmsCredentials["password"],
+	}
 }
 
 func saslScramDialer() *kafka.Dialer {
-	username, password, err := getCredentials()
-	if err != nil {
-		log.Fatal(err)
-	}
+	credentials := getCredentials()
 
-	mechanism, err := scram.Mechanism(scram.SHA512, username, password)
+	mechanism, err := scram.Mechanism(scram.SHA512, credentials.username, credentials.password)
 	if err != nil {
 		log.Fatal(err)
 	}
