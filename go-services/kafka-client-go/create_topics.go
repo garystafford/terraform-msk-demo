@@ -13,7 +13,7 @@ func createTopics(topic string, ctx context.Context) {
 	dialer := saslScramDialer()
 	//dialer := plainDialer()
 
-	conn, err := dialer.DialContext(ctx, "tcp", broker1Address)
+	conn, err := dialer.DialContext(ctx, "tcp", brokers[0])
 
 	if err != nil {
 		panic(err.Error())
@@ -76,7 +76,7 @@ func createTopicAuto(topic string) {
 	dialer := saslScramDialer()
 	//dialer := plainDialer()
 
-	conn, err := dialer.DialLeader(ctx2, "tcp", broker1Address, topic, 0)
+	conn, err := dialer.DialLeader(ctx2, "tcp", brokers[0], topic, 0)
 
 	if err != nil {
 		panic(err.Error())
