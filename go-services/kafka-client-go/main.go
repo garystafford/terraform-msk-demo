@@ -16,6 +16,8 @@ var (
 	group    = getEnv("GROUP", "consumer-group-A")
 	brokers  []string
 	log      = logrus.New()
+	sess     = &session.Session{}
+	region       = "us-east-1"
 )
 
 func getEnv(key, fallback string) string {
@@ -38,7 +40,7 @@ func init() {
 	log.Level = level
 }
 
-func createSession() *session.Session {
+func createAwsSession() *session.Session {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(region),
 	})
@@ -52,8 +54,8 @@ func createSession() *session.Session {
 func main() {
 	// create a new context
 	ctx := context.Background()
-
-	brokers = getBrokers()
+	sess = createAwsSession()
+	brokers = getBrokers(*sess)
 
 	// produce messages in a new go routine, since
 	// both the produce and consume functions are

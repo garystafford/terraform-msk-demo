@@ -11,7 +11,6 @@ import (
 )
 
 var (
-	region       = "us-east-1"
 	secretId     = "AmazonMSK_credentials"
 	versionStage = "AWSCURRENT"
 )
@@ -22,7 +21,6 @@ type credentials struct {
 }
 
 func getCredentials() credentials {
-	sess := createSession()
 	svc := secretsmanager.New(sess)
 	input := &secretsmanager.GetSecretValueInput{
 		SecretId:     aws.String(secretId),
