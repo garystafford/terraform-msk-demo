@@ -52,10 +52,6 @@ spec:
               value: "bar-topic"
             - name: GROUP
               value: "consumer-group-A"
-            - name: BROKER1
-              value: {{ .Values.env.scram.broker1 }}
-            - name: BROKER2
-              value: {{ .Values.env.scram.broker2 }}
 ---
 apiVersion: v1
 kind: Service
@@ -111,51 +107,3 @@ spec:
               value: "foo-topic"
             - name: GROUP
               value: "consumer-group-B"
-            - name: BROKER1
-              value: {{ .Values.env.scram.broker1 }}
-            - name: BROKER2
-              value: {{ .Values.env.scram.broker2 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: cmak
-  labels:
-    app: cmak
-spec:
-  ports:
-    - name: http
-      port: 9000
-  selector:
-    app: cmak
-  type: NodePort
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: cmak
-  labels:
-    app: cmak
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: cmak
-  template:
-    metadata:
-      labels:
-        app: cmak
-      annotations:
-        sidecar.istio.io/inject: "false"
-    spec:
-      containers:
-        - name: cmak
-          image: hlebalbau/kafka-manager:latest
-          ports:
-            - containerPort: 9000
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: ZK_HOSTS
-              value: {{ .Values.env.scram.zookeeper }}
