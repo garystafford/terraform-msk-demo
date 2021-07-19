@@ -39,8 +39,8 @@ go run kafka-client
 time docker build -t garystafford/kafka-demo-service:1.0.0 . --no-cache
 docker push garystafford/kafka-demo-service:1.0.0
 
-time docker build -t garystafford/kafka-demo-service:1.0.0-scram . --no-cache
-docker push garystafford/kafka-demo-service:1.0.0-scram
+time docker build -t garystafford/kafka-demo-service:1.1.0-scram . --no-cache
+docker push garystafford/kafka-demo-service:1.1.0-scram
 ```
 
 ### Check Logs from Consumer
@@ -49,7 +49,3 @@ docker push garystafford/kafka-demo-service:1.0.0-scram
 export KAFKA_CONTAINER=$(kubectl get pods -n kafka -l app=kafka-demo-go | awk 'FNR == 2 {print $1}')
 kubectl logs $KAFKA_CONTAINER -n kafka
 ```
-
-### Sample Output from Consumer
-
-![Consumer](consumer.png)

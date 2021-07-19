@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"strings"
 )
@@ -11,8 +10,8 @@ var (
 	paramName = "/msk/scram/brokers"
 )
 
-func getBrokers(sess session.Session) []string {
-	ssmsvc := ssm.New(&sess, aws.NewConfig())
+func getBrokers() []string {
+	ssmsvc := ssm.New(sess, aws.NewConfig())
 
 	param, err := ssmsvc.GetParameter(&ssm.GetParameterInput{
 		Name:           aws.String(paramName),
