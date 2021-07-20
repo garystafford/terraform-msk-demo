@@ -1,6 +1,48 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: kafka-client-msk
+  labels:
+    app: kafka-client-msk
+    component: service
+spec:
+  ports:
+    - name: http
+      port: 8080
+  selector:
+    app: kafka-client-msk
+    component: service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-client-msk
+  labels:
+    app: kafka-client-msk
+    component: service
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: kafka-client-msk
+      component: service
+  template:
+    metadata:
+      labels:
+        app: kafka-client-msk
+        component: service
+    spec:
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      containers:
+        - image: {{ .Values.image.kafkaClientMSK.image }}
+          name: kafka-client-msk
+          imagePullPolicy: {{ .Values.image.kafkaClientMSK.pullPolicy }}
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: kafka-demo-service-a
   labels:
     app: kafka-demo-service-a
@@ -33,16 +75,14 @@ spec:
       labels:
         app: kafka-demo-service-a
         component: service
-      annotations:
-        sidecar.istio.io/inject: "false"
     spec:
       serviceAccountName: {{ .Values.serviceAccountName }}
       containers:
-        - image: {{ .Values.image.image }}
+        - image: {{ .Values.image.kafkaDemoService.image }}
           name: kafka-demo-service-a
           ports:
-            - containerPort: {{ .Values.image.ports.containerPort }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            - containerPort: {{ .Values.image.kafkaDemoService.ports.containerPort }}
+          imagePullPolicy: {{ .Values.image.kafkaDemoService.pullPolicy }}
           env:
             - name: LOG_LEVEL
               value: "trace"
@@ -88,16 +128,14 @@ spec:
       labels:
         app: kafka-demo-service-b
         component: service
-      annotations:
-        sidecar.istio.io/inject: "false"
     spec:
       serviceAccountName: {{ .Values.serviceAccountName }}
       containers:
-        - image: {{ .Values.image.image }}
+        - image: {{ .Values.image.kafkaDemoService.image }}
           name: kafka-demo-service-b
           ports:
-            - containerPort: {{ .Values.image.ports.containerPort }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            - containerPort: {{ .Values.image.kafkaDemoService.ports.containerPort }}
+          imagePullPolicy: {{ .Values.image.kafkaDemoService.pullPolicy }}
           env:
             - name: LOG_LEVEL
               value: "trace"

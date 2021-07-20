@@ -1,10 +1,13 @@
 replicaCount: 2
 
-#serviceAccountName: msk-oidc-serviceaccount
 serviceAccountName: msk-sasl-scram-serviceaccount
 
 image:
-  image: garystafford/kafka-demo-service:1.1.0-scram
-  pullPolicy: IfNotPresent
-  ports:
-    containerPort: 8080
+  kafkaClientMSK:
+    image: garystafford/kafka-client-msk:1.0.0
+    pullPolicy: IfNotPresent
+  kafkaDemoService:
+    image: garystafford/kafka-demo-service:1.1.0-scram
+    pullPolicy: IfNotPresent
+    ports:
+      containerPort: 8080
