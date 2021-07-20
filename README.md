@@ -13,11 +13,9 @@ Assumes that you have eksctl, Terraform, AWS CLI v2, and Helm 3 installed.
 3. Create VPC Peering relationship between MSK and EKS VPCs;
 4. Update routing tables for both VPCs and associated subnets to route traffic to CIDR range of opposite VPC;
 5. Update default VPC security groups to allow traffic;
-6. Update MSK security group to allow access to MSK ports (e.g., 2181, 2182, 9092, 9094, 9098) from EKS VPC CIDR range (
-   e.g., 192.168.0.0/16);
-7. Create IAM Roles for Service Accounts (IRSA) - allows access to MSK from EKS (see [Helm README](./kafka-client/README.md));
-8. Deploy Tomcat-based Kafka client container using Helm (see [Helm README](./kafka-client/README.md));
-9. Configure Kafka client container (see [Kafka Client Configuration Notes](kafka-config/Install-Kafka-Client.md));
+6. Create IAM Roles for Service Accounts (IRSA) - allows access to MSK from EKS (see [Helm README](./kafka-client/README.md));
+7. Deploy Tomcat-based Kafka client container using Helm (see [Helm README](./kafka-client/README.md));
+8. Configure Kafka client container (see [Kafka Client Configuration Notes](kafka-config/Install-Kafka-Client.md));
 
 ## Helpful AWS CLI Commands for Amazon MSK
 
@@ -44,12 +42,12 @@ cd ./tf-msk
 
 terraform validate
 
-terrafrom plan
+terraform plan
 
 terraform apply
 ```
 
-# Results
+## Results
 
 ![Consumer](./pics/kafka_client.png)
 
