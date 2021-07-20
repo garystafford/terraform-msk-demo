@@ -73,8 +73,8 @@ KAFKA_PACKAGE=kafka_2.13-2.8.0
 PROPERTIES_FILE="bin/client.properties"
 cd $KAFKA_PACKAGE
 
-export ZOOKPR="z-1.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:2181,z-3.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:2181"
-export BBROKERS="b-1.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094,b-2.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094,b-3.demo-msk-cluster.tvrqus.c2.kafka.us-east-1.amazonaws.com:9094"
+export ZOOKPR=$(aws ssm get-parameter --name /msk/scram/zookeeper --query 'Parameter.Value' --output text)
+export BBROKERS=$(aws ssm get-parameter --name /msk/scram/brokers --query 'Parameter.Value' --output text)
 
 bin/kafka-topics.sh --create --topic demo-events \
     --partitions 3 --replication-factor 3 --zookeeper $ZOOKPR
@@ -106,8 +106,8 @@ cd $KAFKA_PACKAGE
 wget https://github.com/aws/aws-msk-iam-auth/releases/download/1.1.0/aws-msk-iam-auth-1.1.0-all.jar
 mv aws-msk-iam-auth-1.1.0-all.jar libs/
 
-export ZOOKPR="z-1.demo-msk-cluster-iam.99s971.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster-iam.99s971.c2.kafka.us-east-1.amazonaws.com:2181,z-3.demo-msk-cluster-iam.99s971.c2.kafka.us-east-1.amazonaws.com:2181"
-export BBROKERS="b-1.demo-msk-cluster-iam.99s971.c2.kafka.us-east-1.amazonaws.com:9098,b-2.demo-msk-cluster-iam.99s971.c2.kafka.us-east-1.amazonaws.com:9098"
+export ZOOKPR=$(aws ssm get-parameter --name /msk/scram/zookeeper --query 'Parameter.Value' --output text)
+export BBROKERS=$(aws ssm get-parameter --name /msk/scram/brokers --query 'Parameter.Value' --output text)
 
 bin/kafka-topics.sh --create --topic demo-events-iam \
     --partitions 2 --replication-factor 2 --zookeeper $ZOOKPR \
@@ -168,8 +168,8 @@ export AWS_ACCOUNT=$(aws sts get-caller-identity --output text --query 'Account'
 PROPERTIES_FILE="bin/client-oidc.properties"
 sed -i "s/AWS_ACCOUNT/${AWS_ACCOUNT}/g" ${PROPERTIES_FILE}
 
-export ZOOKPR="z-3.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181"
-export BBROKERS="b-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096,b-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096"
+export ZOOKPR=$(aws ssm get-parameter --name /msk/scram/zookeeper --query 'Parameter.Value' --output text)
+export BBROKERS=$(aws ssm get-parameter --name /msk/scram/brokers --query 'Parameter.Value' --output text)
 
 bin/kafka-topics.sh --list --zookeeper $ZOOKPR
 
