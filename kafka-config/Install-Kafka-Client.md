@@ -34,7 +34,6 @@ wget -qO- https://downloads.apache.org/kafka/2.8.0/$KAFKA_PACKAGE.tgz | tar -xzf
 cp /usr/local/openjdk-16/lib/security/cacerts /tmp/kafka.client.truststore.jks
 exit
 ```
-
 Install client properties for non-IAM cluster security.
 
 ```shell
@@ -136,8 +135,8 @@ Optional: Install AWS CLI v2.
 ```shell
 apt update
 yes | apt install wget unzip less groff
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
+wget "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+unzip awscli-exe-linux-x86_64.zip
 ./aws/install
 echo "export PATH=/usr/local/bin:$PATH" >> ~/.bashrc
 echo "AWS_PAGER=" >> ~/.bashrc
