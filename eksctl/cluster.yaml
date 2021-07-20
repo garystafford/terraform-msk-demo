@@ -1,0 +1,32 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: eks-kafka-demo
+  region: us-east-2
+  version: "1.20"
+iam:
+  withOIDC: true
+managedNodeGroups:
+  - name: managed-ng-1
+    amiFamily: AmazonLinux2
+    instanceType: t3.medium
+    desiredCapacity: 3
+    minSize: 2
+    maxSize: 5
+    volumeSize: 120
+    volumeType: gp2
+    labels:
+      nodegroup-type: demo-app-workloads
+    tags:
+      nodegroup-name: managed-ng-1
+      nodegroup-role: worker
+    ssh:
+      enableSsm: true # use aws ssm instead of ssh - no need to open port 22
+    iam:
+      withAddonPolicies:
+        albIngress: true
+        autoScaler: true
+        cloudWatch: true
+# cloudWatch:
+#   clusterLogging:
+#     enableTypes: ["*"]
