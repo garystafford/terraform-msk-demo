@@ -57,7 +57,7 @@ resource "aws_iam_policy" "eks_client_secretmanager_policy" {
       },
       {
         Effect : "Allow",
-        Action : "ssm:GetParameters",
+        Action : "ssm:GetParameter",
         Resource : "arn:aws:ssm:${var.region}:${data.aws_caller_identity.current.account_id}:parameter/msk/scram/*"
       }
     ]
