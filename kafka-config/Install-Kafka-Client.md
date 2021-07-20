@@ -160,6 +160,9 @@ bin/kafka-server-start.sh config/server.properties > /dev/null 2>&1 &
 Using Kafka Client for MSK.
 
 ```shell
+export KAFKA_CONTAINER=$(kubectl get pods -n kafka -l app=kafka-client-msk | awk 'FNR == 2 {print $1}')
+kubectl exec -it $KAFKA_CONTAINER -n kafka -- bash
+
 export AWS_ACCOUNT=$(aws sts get-caller-identity --output text --query 'Account')
 
 PROPERTIES_FILE="bin/client-oidc.properties"

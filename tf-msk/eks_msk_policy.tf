@@ -44,24 +44,71 @@ resource "aws_iam_policy" "kafka_client_msk_policy" {
         Effect : "Allow",
         Action: [
           "kafka:ListTagsForResource",
-          "kafka:GetCompatibleKafkaVersions",
-          "kafka:DescribeConfigurationRevision",
-          "kafka:ListClusters",
-          "kafka:DescribeConfiguration",
           "kafka:ListScramSecrets",
           "kafka:DescribeCluster",
-          "kafka:ListKafkaVersions",
           "kafka:GetBootstrapBrokers",
-          "kafka:ListConfigurations",
           "kafka:BatchDisassociateScramSecret",
           "kafka:RebootBroker",
           "kafka:BatchAssociateScramSecret",
-          "kafka:DescribeClusterOperation",
-          "kafka:ListConfigurationRevisions",
           "kafka:ListNodes",
-          "kafka:ListClusterOperations"
         ],
         Resource : "arn:aws:kafka:${var.region}:${data.aws_caller_identity.current.account_id}:cluster/*/*"
+      },
+      {
+        Effect : "Allow",
+        Action: [
+          "kafka:ListClusterOperations"
+        ],
+        Resource : "arn:aws:kafka:${var.region}:${data.aws_caller_identity.current.account_id}:/v1/clusters/*"
+      },
+      {
+        Effect : "Allow",
+        Action: [
+          "kafka:ListClusters"
+        ],
+        Resource : "arn:aws:kafka:${var.region}:${data.aws_caller_identity.current.account_id}:/v1/clusters"
+      },
+      {
+        Effect : "Allow",
+        Action: [
+          "kafka:ListKafkaVersion"
+        ],
+        Resource : "arn:aws:kafka:${var.region}:${data.aws_caller_identity.current.account_id}:/v1/kafka-versions"
+      },
+      {
+        Effect : "Allow",
+        Action: [
+          "kafka:DescribeConfiguration"
+        ],
+        Resource : "arn:aws:kafka:${var.region}:${data.aws_caller_identity.current.account_id}:/v1/configurations/*"
+      },
+      {
+        Effect : "Allow",
+        Action: [
+          "kafka:DescribeClusterOperation"
+        ],
+        Resource : "arn:aws:kafka:${var.region}:${data.aws_caller_identity.current.account_id}:/v1/operations/*"
+      },
+      {
+        Effect : "Allow",
+        Action: [
+          "kafka:ListConfigurationRevisions"
+        ],
+        Resource : "arn:aws:kafka:${var.region}:${data.aws_caller_identity.current.account_id}:/v1/configurations/*/revisions"
+      },
+      {
+        Effect : "Allow",
+        Action: [
+          "kafka:DescribeConfigurationRevision"
+        ],
+        Resource : "arn:aws:kafka:${var.region}:${data.aws_caller_identity.current.account_id}:/v1/configurations/*/revisions/*"
+      },
+      {
+        Effect : "Allow",
+        Action: [
+          "kafka:GetCompatibleKafkaVersions"
+        ],
+        Resource : "arn:aws:kafka:${var.region}:${data.aws_caller_identity.current.account_id}:/v1/compatible-kafka-versions"
       }
     ]
   })

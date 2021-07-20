@@ -12,7 +12,7 @@ resource "aws_iam_role" "eks_kafka_demo_app_oidc_role" {
         Action : "sts:AssumeRoleWithWebIdentity",
         Condition : {
           "StringEquals" : {
-            "${var.oidc_id}" : "system:serviceaccount:${var.eks_namespace}:kafka-demo-app-oidc-serviceaccount"
+            "${var.oidc_id}" : "system:serviceaccount:${var.eks_namespace}:kafka-demo-app-sasl-scram-serviceaccount"
           }
         }
       },
@@ -51,7 +51,7 @@ resource "aws_iam_role" "eks_kafka_client_msk_oidc_role" {
         Action : "sts:AssumeRoleWithWebIdentity",
         Condition : {
           "StringEquals" : {
-            "${var.oidc_id}" : "system:serviceaccount:${var.eks_namespace}:kafka-client-msk-oidc-serviceaccount"
+            "${var.oidc_id}" : "system:serviceaccount:${var.eks_namespace}:kafka-client-msk-sasl-scram-serviceaccount"
           }
         }
       },
