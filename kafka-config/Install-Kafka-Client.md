@@ -155,3 +155,19 @@ Unused, to start Kafka locally vs. MSK.
 bin/zookeeper-server-start.sh config/zookeeper.properties > /dev/null 2>&1 &
 bin/kafka-server-start.sh config/server.properties > /dev/null 2>&1 & 
 ```
+
+
+Using Kafka Client for MSK.
+
+```shell
+export AWS_ACCOUNT=$(aws sts get-caller-identity --output text --query 'Account')
+
+PROPERTIES_FILE="bin/client-oidc.properties"
+sed -i "s/AWS_ACCOUNT/${AWS_ACCOUNT}/g" ${PROPERTIES_FILE}
+
+export ZOOKPR="z-3.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181,z-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:2181"
+export BBROKERS="b-1.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096,b-2.demo-msk-cluster-scram.bsdtxy.c2.kafka.us-east-1.amazonaws.com:9096"
+
+bin/kafka-topics.sh --list --zookeeper $ZOOKPR
+
+```

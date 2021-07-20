@@ -40,7 +40,7 @@ resource "aws_secretsmanager_secret_policy" "scram_auth_secret_policy" {
 }
 
 resource "aws_iam_policy" "eks_client_secretmanager_policy" {
-  name = "EksScramSecretManagerPolicy"
+  name = "EKSScramSecretManagerPolicy"
   path = "/"
   policy = jsonencode({
     "Version" : "2012-10-17",

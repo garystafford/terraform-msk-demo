@@ -1,18 +1,6 @@
-# Helm Chart: kafka-client
-
-Deploys two `tomcat:10.0.8-jdk16-openjdk` containers, which are then configured as a Kafka client producer and consumer.
-
-## Container 1
-
-Intended to be configured for use with an IAM Policy for auth with OIDC. Container 1 uses the `msk-serviceaccount` Service Account. See the `eks_msk_policy.tf` file for the IAM Policy, `KafkaClientAuthorizationPolicy`.
-
-## Container 2
-
-Intended to be configured for use with an existing IAM Role for auth with OIDC. Container 2 uses the `msk-oidc-serviceaccount` Service Account. See the `eks_msk_role.tf` file for the IAM Role, `EksKafkaOidcRole`, which is associated with the IAM Policy, `KafkaClientAuthorizationPolicy`.
+# Helm Chart: kafka-demo-app and kafka-client-msk
 
 ## IAM Role for Service Account (IRSA)
-
-For using IAM auth with EKS and MSK, with or without an existing role.
 
 ```shell
 export AWS_ACCOUNT=$(aws sts get-caller-identity --output text --query 'Account')
@@ -22,33 +10,43 @@ export NAMESPACE="kafka"
 
 kubectl create namespace $NAMESPACE
 
-# iam policy associated with service account
+# kafka-demo-app: iam policy associated with service account
 eksctl create iamserviceaccount \
-  --name msk-serviceaccount \
+  --name kafka-demo-app-serviceaccount \
   --namespace $NAMESPACE \
   --region $EKS_REGION \
   --cluster $CLUSTER_NAME \
-  --attach-policy-arn "arn:aws:iam::${AWS_ACCOUNT}:policy/KafkaClientAuthorizationPolicy" \
+  --attach-policy-arn "arn:aws:iam::${AWS_ACCOUNT}:policy/EKSKafkaDemoAppPolicy" \
   --approve \
   --override-existing-serviceaccounts
 
-# existing iam role associated with service account
+# kafka-demo-app: existing iam role associated with service account
 eksctl create iamserviceaccount \
-  --name msk-oidc-serviceaccount \
+  --name kafka-demo-app-oidc-serviceaccount \
   --namespace $NAMESPACE \
   --region $EKS_REGION \
   --cluster $CLUSTER_NAME \
-  --attach-role-arn "arn:aws:iam::${AWS_ACCOUNT}:role/EksKafkaOidcRole" \
+  --attach-role-arn "arn:aws:iam::${AWS_ACCOUNT}:role/EKSKafkaDemoAppRole" \
   --approve \
   --override-existing-serviceaccounts
 
-# access secrets manager for sasl scram
+# kafka-demo-app: access secrets manager for sasl scram
 eksctl create iamserviceaccount \
-  --name msk-sasl-scram-serviceaccount \
+  --name kafka-demo-app-sasl-scram-serviceaccount \
   --namespace $NAMESPACE \
   --region $EKS_REGION \
   --cluster $CLUSTER_NAME \
-  --attach-policy-arn "arn:aws:iam::${AWS_ACCOUNT}:policy/EksScramSecretManagerPolicy" \
+  --attach-policy-arn "arn:aws:iam::${AWS_ACCOUNT}:policy/EKSScramSecretManagerPolicy" \
+  --approve \
+  --override-existing-serviceaccounts
+
+# kafka-client-msk: access msk and secrets manager for sasl scram
+eksctl create iamserviceaccount \
+  --name kafka-client-msk-sasl-scram-serviceaccount \
+  --namespace $NAMESPACE \
+  --region $EKS_REGION \
+  --cluster $CLUSTER_NAME \
+  --attach-role-arn "arn:aws:iam::${AWS_ACCOUNT}:role/EKSKafkaClientMSKRole" \
   --approve \
   --override-existing-serviceaccounts
 
@@ -57,7 +55,17 @@ eksctl get iamserviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 eksctl get iamserviceaccount msk-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
 kubectl get serviceaccount -n kafka
 
-# eksctl delete iamserviceaccount msk-oidc-serviceaccount --cluster $CLUSTER_NAME --namespace $NAMESPACE
+# eksctl delete iamserviceaccount <iamserviceaccount_name> --cluster $CLUSTER_NAME --namespace $NAMESPACE
+```
+
+```text
+➜  tf-msk git:(master) ✗ kubectl get serviceaccounts -n kafka
+NAME                                         SECRETS   AGE
+default                                      1         8d
+kafka-client-msk-sasl-scram-serviceaccount   1         2m14s
+kafka-demo-app-oidc-serviceaccount           1         2m53s
+kafka-demo-app-sasl-scram-serviceaccount     1         2m16s
+kafka-demo-app-serviceaccount                1         2m56s
 ```
 
 ## Create Topics using Kafka Client

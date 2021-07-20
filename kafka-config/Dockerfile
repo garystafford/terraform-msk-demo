@@ -9,11 +9,11 @@ ENV KAFKA_PACKAGE="kafka_2.13-2.8.0"
 ENV AWS_MSK_IAM_AUTH="1.1.0"
 ENV GLIBC_VER="2.33-r0"
 
-RUN apk update && apk add --no-cache git wget tar bash
+RUN apk update && apk add --no-cache wget tar bash
 
 # install glibc compatibility for alpine (req. for aws cli v2) and aws cli v2
 # reference: https://github.com/aws/aws-cli/issues/4685#issuecomment-615872019
-RUN apk --no-cache add binutils curl \
+RUN apk --no-cache add binutils curl less groff \
     && curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub \
     && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk \
     && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk \
@@ -24,9 +24,6 @@ RUN apk --no-cache add binutils curl \
     && unzip awscliv2.zip \
     && aws/install \
     && rm -rf awscliv2.zip aws \
-        /usr/local/aws-cli/v2/*/dist/aws_completer \
-        /usr/local/aws-cli/v2/*/dist/awscli/data/ac.index \
-        /usr/local/aws-cli/v2/*/dist/awscli/examples \
     && apk --no-cache del binutils curl \
     && rm glibc-${GLIBC_VER}.apk \
     && rm glibc-bin-${GLIBC_VER}.apk \
@@ -37,7 +34,8 @@ RUN cp $JAVA_HOME/lib/security/cacerts /tmp/kafka.client.truststore.jks
 
 # install kafka
 RUN wget https://downloads.apache.org/kafka/$KAFKA_VERSION/$KAFKA_PACKAGE.tgz \
-    && tar -xzf $KAFKA_PACKAGE.tgz
+    && tar -xzf $KAFKA_PACKAGE.tgz \
+    && rm -rf $KAFKA_PACKAGE.tgz
 
 WORKDIR /$KAFKA_PACKAGE
 
@@ -48,4 +46,6 @@ RUN wget https://github.com/aws/aws-msk-iam-auth/releases/download/$AWS_MSK_IAM_
 # copy client properties file(s)
 COPY client*.properties bin/
 
-ENTRYPOINT ["bash"]
+CMD ["/bin/sh", "-c", "tail -f /dev/null"]
+
+ENTRYPOINT ["/bin/bash"]
