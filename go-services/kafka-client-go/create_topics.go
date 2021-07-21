@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/segmentio/kafka-go"
+	"log"
 	"net"
 	"strconv"
 )

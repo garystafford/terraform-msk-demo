@@ -170,7 +170,139 @@ sed -i "s/AWS_ACCOUNT/${AWS_ACCOUNT}/g" ${PROPERTIES_FILE}
 
 export ZOOKPR=$(aws ssm get-parameter --name /msk/scram/zookeeper --query 'Parameter.Value' --output text)
 export BBROKERS=$(aws ssm get-parameter --name /msk/scram/brokers --query 'Parameter.Value' --output text)
+export DISTINGUISHED_NAME=$(echo $BBROKERS | awk -F' '  '{print $1}' | sed 's/b-1/*/g')
 
 bin/kafka-topics.sh --list --zookeeper $ZOOKPR
+
+# KAFKA ACLs
+# https://docs.aws.amazon.com/msk/latest/developerguide/msk-acls.html
+# https://cwiki.apache.org/confluence/display/KAFKA/Kafka+Authorization+Command+Line+Interface
+
+# add read
+bin/kafka-acls.sh \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --add \
+  --allow-principal "User:CN=${DISTINGUISHED_NAME}" \
+  --operation Read \
+  --group=consumer-group-B \
+  --topic foo-topic
+
+bin/kafka-acls.sh \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --add \
+  --allow-principal "User:CN=${DISTINGUISHED_NAME}" \
+  --operation Read \
+  --group=consumer-group-A \
+  --topic bar-topic
+
+# add write
+bin/kafka-acls.sh \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --add \
+  --allow-principal "User:CN=${DISTINGUISHED_NAME}" \
+  --operation Write \
+  --topic foo-topic
+
+bin/kafka-acls.sh \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --add \
+  --allow-principal "User:CN=${DISTINGUISHED_NAME}" \
+  --operation Write \
+  --topic bar-topic
+
+
+export USER=tierlenticar
+## add read
+#bin/kafka-acls.sh \
+#  --authorizer-properties zookeeper.connect=$ZOOKPR \
+#  --add \
+#  --allow-principal User:$USER \
+#  --operation Read \
+#  --group=consumer-group-B \
+#  --topic foo-topic
+#
+#bin/kafka-acls.sh \
+#  --authorizer-properties zookeeper.connect=$ZOOKPR \
+#  --add \
+#  --allow-principal User:$USER \
+#  --operation Read \
+#  --group=consumer-group-A \
+#  --topic bar-topic
+
+## add write
+#bin/kafka-acls.sh \
+#  --authorizer-properties zookeeper.connect=$ZOOKPR \
+#  --add \
+#  --allow-principal User:$USER \
+#  --operation Write \
+#  --topic foo-topic
+#
+#bin/kafka-acls.sh \
+#  --authorizer-properties zookeeper.connect=$ZOOKPR \
+#  --add \
+#  --allow-principal User:$USER \
+#  --operation Write \
+#  --topic bar-topic
+
+# producers and consumers
+bin/kafka-acls.sh \
+  --authorizer kafka.security.auth.SimpleAclAuthorizer \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --add \
+  --allow-principal User:$USER \
+  --producer \
+  --topic foo-topic
+
+bin/kafka-acls.sh \
+  --authorizer kafka.security.auth.SimpleAclAuthorizer \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --add \
+  --allow-principal User:$USER \
+  --producer \
+  --topic bar-topic
+
+bin/kafka-acls.sh \
+  --authorizer kafka.security.auth.SimpleAclAuthorizer \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --add \
+  --allow-principal User:$USER \
+  --consumer \
+  --topic foo-topic \
+  --group consumer-group-B
+
+bin/kafka-acls.sh \
+  --authorizer kafka.security.auth.SimpleAclAuthorizer \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --add \
+  --allow-principal User:$USER \
+  --consumer \
+  --topic bar-topic \
+  --group consumer-group-A
+
+# list
+bin/kafka-acls.sh \
+  --authorizer kafka.security.auth.SimpleAclAuthorizer \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --list
+
+bin/kafka-acls.sh \
+  --authorizer kafka.security.auth.SimpleAclAuthorizer \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --list \
+  --topic foo-topic
+
+# remove
+bin/kafka-acls.sh \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --remove \
+  --topic foo-topic
+
+bin/kafka-acls.sh \
+  --authorizer kafka.security.auth.SimpleAclAuthorizer \
+  --authorizer-properties zookeeper.connect=$ZOOKPR \
+  --remove \
+  --allow-principal "User:CN=${DISTINGUISHED_NAME}" \
+  --operation Read \
+  --topic foo-topic
 
 ```

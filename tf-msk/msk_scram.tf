@@ -6,7 +6,7 @@ resource "aws_msk_scram_secret_association" "msk_cluster_scram_assoc" {
 }
 
 resource "aws_secretsmanager_secret" "scram_auth_secret" {
-  name       = "AmazonMSK_credentials"
+    name       = "AmazonMSK_credentials"
   kms_key_id = aws_kms_key.scram_auth_key.key_id
 }
 
