@@ -9,7 +9,7 @@ ENV KAFKA_PACKAGE="kafka_2.13-2.8.0"
 ENV AWS_MSK_IAM_AUTH="1.1.0"
 ENV GLIBC_VER="2.33-r0"
 
-RUN apk update && apk add --no-cache wget tar bash
+RUN apk update && apk add --no-cache wget tar bash jq
 
 # install glibc compatibility for alpine (req. for aws cli v2) and aws cli v2
 # reference: https://github.com/aws/aws-cli/issues/4685#issuecomment-615872019

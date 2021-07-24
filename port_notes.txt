@@ -1,0 +1,21 @@
+{ org.apache.kafka.common.security.scram.ScramLoginModule required username="tierlenticar" password="xx45VsQ75WqgVatykHUw8Xze"}
+
+
+SSL:9095,PLAINTEXT:9093,SASL_SSL:9096
+JMX Port 9099
+
+To communicate with with a cluster in plaintext, use port 9092.
+
+To communicate with a cluster by using TLS encryption, use port 9094.
+
+SASL_SSL 9096
+
+To communicate with a cluster that is set up to use IAM access control, use port 9098.
+
+Apache ZooKeeper nodes use port 2181 Plaintext 2182 TLS
+
+
+
+192.168.0.0/16 EKS VPC CIDR
+
+10.0.0.0/22 MSK VPC CIDR
