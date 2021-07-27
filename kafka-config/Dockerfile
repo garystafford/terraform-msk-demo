@@ -1,6 +1,6 @@
 # purpose: Kafka client for Amazon MSK
 # author: Gary A. Stafford
-# date: 2021-07-20
+# date: 2021-07-24
 
 FROM openjdk:17-alpine3.14
 
@@ -43,8 +43,8 @@ WORKDIR /$KAFKA_PACKAGE
 RUN wget https://github.com/aws/aws-msk-iam-auth/releases/download/$AWS_MSK_IAM_AUTH/aws-msk-iam-auth-$AWS_MSK_IAM_AUTH-all.jar \
     && mv aws-msk-iam-auth-$AWS_MSK_IAM_AUTH-all.jar libs/
 
-# copy client properties file(s)
-COPY client*.properties bin/
+## copy client properties file(s)
+#COPY client*.properties bin/
 
 CMD ["/bin/sh", "-c", "tail -f /dev/null"]
 

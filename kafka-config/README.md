@@ -2,11 +2,11 @@
 
 ```shell
 # build
-time docker build -t garystafford/kafka-client-msk:1.0.0 . --no-cache
+time docker build -t garystafford/kafka-client-msk:1.0.2 . --no-cache
 
 # push
-docker push garystafford/kafka-client-msk:1.0.0
+docker push garystafford/kafka-client-msk:1.0.2
 
 # test
-docker run -it --rm garystafford/kafka-client-msk:1.0.0
+docker run -it --rm garystafford/kafka-client-msk:1.0.2
 ```

@@ -19,3 +19,16 @@ Apache ZooKeeper nodes use port 2181 Plaintext 2182 TLS
 192.168.0.0/16 EKS VPC CIDR
 
 10.0.0.0/22 MSK VPC CIDR
+
+
+
+listener.name.sasl_ssl.scram-sha-512.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="tierlenticar" password="xx45VsQ75WqgVatykHUw8Xze";
+
+# worked!
+org.apache.kafka.common.security.scram.ScramLoginModule required username="tierlenticar" password="xx45VsQ75WqgVatykHUw8Xze";
+
+
+Amazon MSK uses port 11001 for the JMX Exporter and port 11002 for the Node Exporter.
+
+helm install --create-namespace -n cmak-ns mycmak cmak/cmak-operator
+kubectl port-forward -n cmak-ns service/cmak 9000:9000
